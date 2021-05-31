@@ -16,7 +16,7 @@ The VRToolkit is a shader created for [ReShade](https://github.com/crosire/resha
 **Complete Package** *(Recommended)*
 
 1. Download the [Latest Release](https://gitlab.com/Retrolux/reshade-vrtoolkit/-/releases)
-2. Check the `Game List` below for the game you want to use it on.    
+2. Check the [Game List](https://gitlab.com/Retrolux/reshade-vrtoolkit#game-list) below for the game you want to use it on.    
 3. Extract the contents of the release into the required folder. 
    If the game is not listed below its usually next where the game executable is located.
 4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL. 
@@ -72,3 +72,10 @@ Additionally they contain color correction and adjustments especially created fo
 ### Not Working
 - American Truck Simulator
 - Euro Truck Simulator 2
+
+
+Known Issues & Limitations
+---------
+- Opening the **Preprocessor Settings** in the SteamVR Reshade menu crashes the game. 
+  As a workaround you need to use the screen mirror to change the preprocessor settings
+  and then use the `reload button` it from the SteamVR Reshade to apply the settings.  
