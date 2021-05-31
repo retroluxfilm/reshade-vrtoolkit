@@ -1,3 +1,6 @@
-﻿# Default ignored files
+﻿# Idea project files
 /.idea/
 
+#Base Reshade headers 
+/Shaders/ReShade.fxh
+/Shaders/ReShadeUI.fxh
