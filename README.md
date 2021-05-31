@@ -1,14 +1,15 @@
 VRToolkit
 =======
 
-The VRToolkit is a shader created for [ReShade](https://github.com/crosire/reshade) to support the visuals fidelity in VR by combining multiple shaders to be processed into one single pass to while keeping the GPU overhead minimal.
+The VRToolkit is a shader created for [ReShade](https://github.com/crosire/reshade) to support the visuals fidelity in VR by combining multiple shaders to be processed into one single pass, while keeping the GPU overhead at a minimum.
 
 *Note: Does only work on SteamVR.* 
 
-### Features
+### Main Features
 
 - Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweep spot of your HMD
-- Color Correction Modes to be able to adjust your HMD colors to match  
+- Color Correction Modes to be able to adjust your HMD colors to match
+- Dithering to reduce banding effects of gradients
 
 ## How to install
 
