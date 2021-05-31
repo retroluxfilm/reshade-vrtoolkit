@@ -43,9 +43,17 @@ into one single pass, while keeping the GPU overhead at a minimum.
 3. Adjust your "Sharpening Mask Radius" matching your HMD field of view sweet spot to your personal view range.
    - Keep the radius as small as possible, but as well not to small to not loose sharpness.
 4. **Optional:** Change sharpening mode and color correction mode + settings to your liking.
-   Hover over the `(?) Usage Help (?)` for mode instruction.
+   Hover over the `(?) Usage Help (?)` for selectable modes.
 5. Enable "Peformance Mode" when done 
 
+Hotkeys:
+--------------
+
+**CTRL+PRINT** Creates a screenshot in the `.\ReShade\Screenshots` folder
+
+**CTRL+END** Toggle all Reshade effect on/off *(Does not work in VR)*
+
+**CTRL+POS1/HOME** Enter Reshade config menu *(not visible in VR, only in the steamVR desktop window)*. Use the SteamVR Dashboard instead.
 
 Game List
 ---------
@@ -67,7 +75,7 @@ Additionally they contain color correction and adjustments especially created fo
 | Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   | Working       |
 | Asseto Corsa                        |          64 |  dxgi.dll      | Root Folder (next to assetocorsa.exe)            | Working       |
 | Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  | Working       |
-| Dirt Rally                          |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    | Working       |
+| Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    | Working       |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            | Working       |
 | Project Cars 2                      |          64 |  opengl32.dll  | Root Folder (next to pCARS2.exe)                 | Working       |
 | VTOL VR                             |          64 |  dxgi.dll      | Root Folder (next to VTOLVR.exe)                 | Working       |
