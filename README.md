@@ -1,9 +1,11 @@
 VRToolkit
 =======
 
-The VRToolkit is a shader created for [ReShade](https://github.com/crosire/reshade) to support the visuals fidelity in VR by combining multiple shaders to be processed into one single pass, while keeping the GPU overhead at a minimum.
+The VRToolkit is a shader created for [ReShade](https://github.com/crosire/reshade) 
+to support the visuals fidelity in VR by combining multiple shaders to be processed 
+into one single pass, while keeping the GPU overhead at a minimum.
 
-*Note: Does only work on SteamVR.* 
+*Note: Does only work on games run through SteamVR. (OpenVR API)* 
 
 ### Main Features
 
@@ -16,7 +18,8 @@ The VRToolkit is a shader created for [ReShade](https://github.com/crosire/resha
 **Complete Package** *(Recommended)*
 
 1. Download the [Latest Release](https://gitlab.com/Retrolux/reshade-vrtoolkit/-/releases)
-2. Check the [Game List](https://gitlab.com/Retrolux/reshade-vrtoolkit#game-list) below for the game you want to use it on.    
+2. Check the [Game List](https://gitlab.com/Retrolux/reshade-vrtoolkit#game-list) 
+   below for the game you want to use it on.    
 3. Extract the contents of the release into the required folder. 
    If the game is not listed below its usually next where the game executable is located.
 4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL. 

@@ -5,9 +5,6 @@
 // performance
 //
 // by Retrolux (Alexandre Miguel Maia)
-//
-// Changelog
-//
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #include "ReShade.fxh"
