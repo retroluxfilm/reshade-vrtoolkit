@@ -1,26 +1,28 @@
 VRToolkit
 =======
 
-The VRToolkit is a shader created for [ReShade](https://github.com/crosire/reshade) 
-to support the visuals fidelity in VR by combining multiple shaders to be processed 
-into one single pass, while keeping the GPU overhead at a minimum.
-
-*Note: Does only work on games run through SteamVR. (OpenVR API)* 
+The VRToolkit is a modular shader created for [ReShade](https://github.com/crosire/reshade) 
+to increase the fidelity in VR to get most out of your HMD by increasing sharpness while keeping the performance impact minimal.
 
 ### Main Features
 
 - Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweep spot of your HMD
-- Color Correction Modes to be able to adjust your HMD colors to match
-- Dithering to reduce banding effects of gradients
+- Color Correction Modes to be able to adjust your HMD colors & contrast to your liking
+- Dithering to reduce banding effects of gradients and sharpening artifacts
+- All modules are done in a single pass post shader to improve performance then having them all separate
 
-## How to install
+*Note: Only works on games run through SteamVR. (OpenVR API)*
+
+-----------------------------
+ How to install
+-----------------------------
 
 **Complete Package** *(Recommended)*
 
-1. Download the [Latest Release](https://gitlab.com/Retrolux/reshade-vrtoolkit/-/releases)
+1. Download the [Latest Release](https://gitlab.com/Retrolux/reshade-vrtoolkit/-/releases) `VRToolkitReshadeUniversal_*.zip`
 2. Check the [Game List](https://gitlab.com/Retrolux/reshade-vrtoolkit#game-list) 
    below for the game you want to use it on.    
-3. Extract the contents of the release into the required folder. 
+3. Extract the contents of the release zip into the required game folder. 
    If the game is not listed below its usually next where the game executable is located.
 4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL. 
    Usually modern games use the 64 bit version and renamed to dxgi.dll.
@@ -29,24 +31,26 @@ into one single pass, while keeping the GPU overhead at a minimum.
 
 ## Configure your HMD and preset
 
-1. Open Reshade Config Menu in SteamVR (Reshade icon in the dashboard)
+1. Open Reshade Config Menu in SteamVR (circle Reshade icon in the bottom of the dashboard)
 2. Untick "Peformance Mode" checkbox and go to the VRToolkit tab
-3. Adjust your "Sharpening Mask Radius" matching your HMD field of view sweet spot to your personal view range.
+3. Adjust the "Circle Radius" matching your HMD field of view sweet spot and to your personal view range.
    - Keep the radius as small as possible, but as well not to small to not loose sharpness.
 4. **Optional:** Change sharpening mode and color correction mode + settings to your liking.
    Hover over the `(?) Usage Help (?)` for selectable modes.
-5. Enable "Peformance Mode" when done 
+5. Re-enable "Performance Mode" when done 
 
+-----------------------------
 Hotkeys:
---------------
+-----------------------------
 
 - *CTRL+PRINT* => Creates a screenshot in the `.\ReShade\Screenshots` folder
-- *CTRL+END* => Toggle all Reshade effect on/off *(Does not work in VR)*
+- *CTRL+END* => Toggle all Reshade effect on/off *(Does not work in VR view yet)*
 - *CTRL+POS1/HOME* => Enter Reshade config menu *(not visible in VR, only in the steamVR desktop window)*.
    Use the SteamVR Dashboard instead.
 
+-----------------------------
 Game List
----------
+-----------------------------
 
 ### Working
 
@@ -60,19 +64,20 @@ Additionally they contain color correction and adjustments especially created fo
 
 ---
 
-| Game                                | DLL         | Rename To      | Drop Folder                                      | Status        |
-| ----------------------------------- | -----------:| --------------:|------------------------------------------------- |:-------------:|
-| Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   | Working       |
-| Asseto Corsa                        |          64 |  dxgi.dll      | Root Folder (next to assetocorsa.exe)            | Working       |
-| Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  | Working       |
-| Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    | Working       |
-| IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            | Working       |
-| Project Cars 2                      |          64 |  opengl32.dll  | Root Folder (next to pCARS2.exe)                 | Working       |
-| VTOL VR                             |          64 |  dxgi.dll      | Root Folder (next to VTOLVR.exe)                 | Working       |
+| Game                                | DLL         | Rename To      | Drop Folder                                      |
+| ----------------------------------- | -----------:| --------------:|------------------------------------------------- |
+| American Truck Simulator            |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
+| Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   |
+| Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  |
+| Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    |
+| Euro Truck Simulator 2              |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
+| IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            |
+| Project Cars 2                      |          64 |  opengl32.dll  | Root Folder (next to pCARS2.exe)                 |
+| VTOL VR                             |          64 |  dxgi.dll      | Root Folder (next to VTOLVR.exe)                 |
 
 ### Not Working
-- American Truck Simulator
-- Euro Truck Simulator 2
+
+- ...
 
 
 Known Issues & Limitations
