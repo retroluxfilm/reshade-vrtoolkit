@@ -92,16 +92,16 @@ uniform int VRT_Advanced_help <
 	ui_category = "VR Toolkit"; 
 	ui_type = "radio"; 
 	ui_label = "(?) Usage Help (?)";
-	ui_text = 
-     "The VR toolkit allows to use common shaders into one pass optimized for VR rendering.\n"
-     "";
+	//ui_text = 
+    // "The VR toolkit allows to use common shaders into one pass optimized for VR rendering.\n"
+    // "";
      
      ui_tooltip =
     	" Open the \"Preprocess definitions\" section to change the folowing modes.\n"
     	"\n"
 		" Sharpening Modes:        0 - Disabled sharpening\n"
         "                          1 - Filmic Anamorph Sharpening\n" 
-        "                          2 - AMD FidelityFX Contrast Adaptive Sharpening\n"
+        "                          2 - AMD FidelityFX Contrast Adaptive Sharpening (CAS)\n"
         "\n"
         " Color Correction Modes:  0 - Disabled color correction\n"
         "                          1 - Uses a LUT (Look up table) for specialized and complex corrections.\n"
@@ -109,6 +109,9 @@ uniform int VRT_Advanced_help <
         "\n"
         " Sharpening Masking:      0 - Disabled sharpening masking\n"
         "                          1 - Uses circular sharpening mask to improve shader performance on games rendering on DX10 or higher.\n"
+        "\n"
+        " Dithering:               0 - Disable dithering\n"
+        "                          1 - Enable dithering that adds noise to the image to smoothen out gradients.\n"
         "";
 	     
     >;

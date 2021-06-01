@@ -6,6 +6,84 @@
 // by Retrolux (Alexandre Miguel Maia)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Radial Mask check for VR
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
+from Holger Frydrych VR_CAS_Color.fx shader
+*/
+
+#if VRT_USE_SHARPENING_MASK && VRT_SHARPENING_MODE != 0 // && __RENDERER__ >= 0xa000 // If DX10 or higher
+
+uniform int VRT_SharpeningMaskHelp <
+	ui_category = "Sharpening Mask"; 
+	ui_type = "radio"; 
+	ui_label = " ";
+	ui_text = "IMPORTANT: Adjust \"Circle Radius\" for your VR headset below";
+>; 
+
+uniform float iSharpeningCenterMaskSize <
+    ui_category = "Sharpening Mask";
+    ui_type = "slider";
+    ui_label = "Circle Radius (?)";
+    ui_tooltip = "Adjusts the area that is sharpened from the center of the screen towards the edges.\n"
+                 "This can slightly improve the performance against visual quality.\n\n"
+                 "Recommended settings:\n"
+                 "                       Valve Index  => 0.25 - 0.30 \n"
+				 "                       HP G2        => 0.41 - 0.46\n"
+                 "";
+    ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
+> = 0.30;
+
+#if VRT_SMOOTH_MASK
+uniform float iSharpeningMaskSmoothness <
+    ui_category = "Sharpening Mask";
+    ui_type = "slider";
+    ui_label = "Mask Smoothness";
+    ui_tooltip = "Increases the smootness of the sharpening mask to allow smaller masks while reducing the prominence of the edge";
+    ui_min = 1.0; ui_max = 10; ui_step = 0.1;
+> = 5.0;
+#endif
+
+uniform bool iSharpeningMaskCombinedEyes <
+    ui_category = "Sharpening Mask";
+    ui_label = "Single image for both eyes";
+    ui_tooltip = "For the mask setting to work properly, you need to specify if both eye views are contained in a single image or submitted as separate images.\nIf the sharpening effect looks wrong, toggle this setting and see if it improves.";
+> = true;
+
+
+float RadialSharpeningMask( float2 texcoord )
+{
+    float2 fromCenter;
+    if (iSharpeningMaskCombinedEyes) 
+    {
+        fromCenter = float2(texcoord.x < 0.5 ? 0.3 : 0.7, 0.5) - texcoord;
+    } else{
+        fromCenter = float2(0.5, 0.5) - texcoord;
+    }
+
+    //correct aspect ratio of mask circle                   
+    fromCenter.x *= ReShade::AspectRatio;
+
+    float distSqr = dot(fromCenter, fromCenter);
+
+    // just apply sharpened image when inside the center mask
+    float maskSizeSqr = iSharpeningCenterMaskSize * iSharpeningCenterMaskSize;
+    if (distSqr < maskSizeSqr){
+        #if VRT_SMOOTH_MASK 
+            float diff = (distSqr/maskSizeSqr);
+            return 1 - pow(diff,iSharpeningMaskSmoothness);
+        #else
+            return 1;
+        #endif
+    } else{
+        return 0;
+    }
+}
+
+#endif
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Sharpen Shader (FilmicAnamorphSharpen.fx)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -20,9 +98,16 @@ http://creativecommons.org/licenses/by-sa/4.0/.
 
 #if (VRT_SHARPENING_MODE == 1)
 
+uniform int VRT_SharpeningMode1 <
+	ui_category = "Sharpening"; 
+	ui_type = "radio"; 
+	ui_label = " ";
+	ui_text = "MODE 1: Filmic Anamorph Sharpen";
+>; 
+
 uniform float Strength < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Strength";
-    ui_category = "FilmicAnamorphSharpen";
+    ui_category = "Sharpening";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 500; ui_step = 1;
 > = 250.0;
@@ -30,22 +115,23 @@ uniform float Strength < __UNIFORM_SLIDER_FLOAT1
 uniform float Offset < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Radius";
     ui_tooltip = "High-pass cross offset in pixels";
-    ui_category = "FilmicAnamorphSharpen";
+    ui_category = "Sharpening";
     ui_min = 0.0; ui_max = 2.0; ui_step = 0.01;
 > = 0.10;
 
 uniform float Clamp < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Clamping";
-    ui_category = "FilmicAnamorphSharpen";
+    ui_category = "Sharpening";
     ui_min = 0.5; ui_max = 1.0; ui_step = 0.001;
 > = 0.525;
 
 uniform bool Preview < __UNIFORM_INPUT_BOOL1
     ui_label = "Preview sharpen layer";
-    ui_tooltip = "Preview sharpen layer and mask for adjustment.\n"
-        "If you don't see red strokes,\n"
-        "try changing Preprocessor Definitions in the Settings tab.";
-    ui_category = "FilmicAnamorphSharpen";
+	ui_category = "Sharpening";    
+	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n"
+    		     "If you don't see red strokes,\n"
+        	     "try changing Preprocessor Definitions in the Settings tab.";
+    
 > = false;
 
 
@@ -119,11 +205,18 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 
 #if (VRT_SHARPENING_MODE == 2)
 
+uniform int VRT_SharpeningMode2 <
+	ui_category = "Sharpening"; 
+	ui_type = "radio"; 
+	ui_label = " ";
+	ui_text = "MODE 2: AMD Fidelity FX (CAS)";
+>;
+
 uniform float Contrast <
 	ui_type = "slider";
     ui_label = "Contrast Adaptation";
     ui_tooltip = "Adjusts the range the shader adapts to high contrast (0 is not all the way off).  Higher values = more high contrast sharpening.";
-    ui_category = "Cas";
+    ui_category = "Sharpening";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 1.0;  ui_step = 0.01;
 > = 0.0;
@@ -132,7 +225,7 @@ uniform float Sharpening <
 	ui_type = "slider";
     ui_label = "Sharpening intensity";
     ui_tooltip = "Adjusts sharpening intensity by averaging the original pixels to the sharpened result.  1.0 is the unmodified default.";
-    ui_category = "Cas";
+    ui_category = "Sharpening";
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
 > = 1.0;
 
@@ -207,76 +300,6 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
 
 #endif
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Radial Mask check for VR
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-/*
-extracted from Holger Frydrych VR_CAS_Color.fx shader
-*/
-
-#if VRT_USE_SHARPENING_MASK && VRT_SHARPENING_MODE != 0 // && __RENDERER__ >= 0xa000 // If DX10 or higher
-
-uniform float iSharpeningCenterMaskSize <
-    ui_category = "Sharpening Mask";
-    ui_type = "slider";
-    ui_label = "Circle Radius";
-    ui_tooltip = "Adjusts the area that is sharpened from the center of the screen towards the edges.\n"
-                 "This can slightly improve the performance against visual quality.\n\n"
-                 "Recommended settings:\n"
-                 "                       Valve Index  => 0.30 \n"
-				 "                       HP G2        => 0.46 \n"
-                 "";
-    ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
-> = 0.30;
-
-#if VRT_SMOOTH_MASK
-uniform float iSharpeningMaskSmoothness <
-    ui_category = "Sharpening Mask";
-    ui_type = "slider";
-    ui_label = "Mask Smoothness";
-    ui_tooltip = "Increases the smootness of the sharpening mask to allow smaller masks while reducing the prominence of the edge";
-    ui_min = 1.0; ui_max = 10; ui_step = 0.1;
-> = 5.0;
-#endif
-
-uniform bool iSharpeningMaskCombinedEyes <
-    ui_category = "Sharpening Mask";
-    ui_label = "Single image for both eyes";
-    ui_tooltip = "For the mask setting to work properly, you need to specify if both eye views are contained in a single image or submitted as separate images. If the sharpening effect looks wrong, toggle this setting and see if it improves.";
-> = true;
-
-
-float RadialSharpeningMask( float2 texcoord )
-{
-    float2 fromCenter;
-    if (iSharpeningMaskCombinedEyes) 
-    {
-        fromCenter = float2(texcoord.x < 0.5 ? 0.3 : 0.7, 0.5) - texcoord;
-       //fromCenter.x *= 2;
-    } else{
-        fromCenter = float2(0.5, 0.5) - texcoord;
-    }
-
-    //correct aspect ratio of mask circle                   
-    fromCenter.x *= ReShade::AspectRatio;
-
-    float distSqr = dot(fromCenter, fromCenter);
-
-    // just apply sharpened image when inside the center mask
-    float maskSizeSqr = iSharpeningCenterMaskSize * iSharpeningCenterMaskSize;
-    if (distSqr < maskSizeSqr){
-        #if VRT_SMOOTH_MASK 
-            float diff = (distSqr/maskSizeSqr);
-            return 1 - pow(diff,iSharpeningMaskSmoothness);
-        #else
-            return 1;
-        #endif
-    } else{
-        return 0;
-    }
-}
-
-#endif
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // LUT shader (LUT.fx)
@@ -306,26 +329,28 @@ static const float2 LUT_TEXEL_SIZE = float2(1.0 /_fLUT_TileSizeXY / _fLUT_TileAm
 texture texLUT < source = fLUT_TextureName; > { Width = _fLUT_TileSizeXY*_fLUT_TileAmount; Height = _fLUT_TileSizeXY; Format = RGBA8; };
 sampler	SamplerLUT 	{ Texture = texLUT; };
 
-uniform int LUT_Advanced_help <
-	ui_category = "LUT"; 
-	ui_type = "radio"; ui_label = " ";
-	ui_text =
+uniform int VRT_ColorCorrectionMode1 <
+	ui_category = "Color Correction"; 
+	ui_type = "radio"; 
+	ui_label= "(?) Important Note (?)";
+	ui_text = "MODE 1: LUT (image based Look Up Table)";
+	ui_tooltip =
 		"NOTE: For the LUT to work you need to define a proper lut texture in\n"
         "the \"Preprocessor definitions\" other than the default \"lut.png\"!";
-    >;
+>;
 
 uniform float fLUT_AmountChroma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT chroma amount";
     ui_tooltip = "Intensity of color/chroma change of the LUT.";
-    ui_category = "LUT";
+    ui_category = "Color Correction";
 > = 1.00;
 
 uniform float fLUT_AmountLuma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT luma amount";
     ui_tooltip = "Intensity of luma change of the LUT.";
-    ui_category = "LUT";
+    ui_category = "Color Correction";
 > = 1.00;
 
 float3 PS_LUT_Apply(float4 backbuffer, float4 vpos : SV_Position, float2 texcoord : TEXCOORD) : COLOR
@@ -361,20 +386,27 @@ float3 PS_LUT_Apply(float4 backbuffer, float4 vpos : SV_Position, float2 texcoor
 
 #if (VRT_COLOR_CORRECTION_MODE == 2)
 
+uniform int VRT_ColorCorrectionMode2 <
+	ui_category = "Color Correction"; 
+	ui_type = "radio"; 
+	ui_label = " ";
+	ui_text = "MODE 2: Tonemapping";
+>;
+
 uniform float Gamma < __UNIFORM_SLIDER_FLOAT1
 	ui_min = 0.0; ui_max = 2.0;ui_step = 0.01;
 	ui_tooltip = "Adjust midtones. 1.0 is neutral. This setting does exactly the same as the one in Lift Gamma Gain, only with less control.";
-    ui_category = "Tonemapping";
+    ui_category = "Color Correction";
 > = 1.0;
 uniform float Exposure < __UNIFORM_SLIDER_FLOAT1
 	ui_min = -1.0; ui_max = 1.0;ui_step = 0.01;
 	ui_tooltip = "Adjust exposure";
-    ui_category = "Tonemapping";
+    ui_category = "Color Correction";
 > = 0.0;
 uniform float Saturation < __UNIFORM_SLIDER_FLOAT1
 	ui_min = -1.0; ui_max = 1.0;ui_step = 0.01;
 	ui_tooltip = "Adjust saturation";
-    ui_category = "Tonemapping";
+    ui_category = "Color Correction";
 > = 0.0;
 
 float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texcoord : TexCoord) : COLOR
@@ -406,7 +438,7 @@ uniform float iDitheringStrength <
     ui_type = "slider";
     ui_label = "Dithering Strength";
     ui_tooltip = "Adjusts the dithering strength to reduce banding artifacts";
-    ui_min = 0.1; ui_max = 10.0;ui_step = 0.005;
+    ui_min = 0.05; ui_max = 2.5;ui_step = 0.005;
 > = 0.375;
 
 uniform float timer < source = "timer"; >;
@@ -414,7 +446,7 @@ uniform float timer < source = "timer"; >;
 float3 ScreenSpaceDither(float2 vScreenPos: SV_Position)
 {
     //Iestyn's RGB dither (7 asm instructions) from Portal2 X360 , slightly modified for VR
-    float3 vDither=dot(float2(171.0,231.0),vScreenPos.xy + timer*0.001).xxx;
+    float3 vDither=dot(float2(171.0,231.0),vScreenPos.xy + (timer * 0.001)).xxx;
     vDither.rgb = frac(vDither.rgb/float3(103.0,71.0,97.0)) - float3(0.5,0.5,0.5);
     return (vDither.rgb/255) * iDitheringStrength;
 
