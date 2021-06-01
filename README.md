@@ -76,6 +76,7 @@ Additionally they contain color correction and adjustments especially created fo
 | American Truck Simulator            |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
 | Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   |
 | Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  |
+| Beat Saber                          |          64 |  dxgi.dll      | Root Folder (next to Beat Saber.exe)             |
 | Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    |
 | Euro Truck Simulator 2              |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            |
@@ -84,7 +85,7 @@ Additionally they contain color correction and adjustments especially created fo
 
 ### Not Working
 
-- ...
+- Walking Dead Saints and Sinners (one eye stays black)
 
 
 Known Issues & Limitations
