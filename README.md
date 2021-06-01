@@ -86,6 +86,7 @@ Additionally they contain color correction and adjustments especially created fo
 ### Not Working
 
 - Walking Dead Saints and Sinners (one eye stays black)
+- Race Room Experience (Crashes on start in VR on 32 & 64bit version)
 
 
 Known Issues & Limitations
