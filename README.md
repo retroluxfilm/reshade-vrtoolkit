@@ -24,17 +24,8 @@ into one single pass, while keeping the GPU overhead at a minimum.
    If the game is not listed below its usually next where the game executable is located.
 4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL. 
    Usually modern games use the 64 bit version and renamed to dxgi.dll.
-5. Start up the game and adjust your HMD settings & preset if required *(see section below)*
+5. Start up the game and [Confiure your HMD settings](https://gitlab.com/Retrolux/reshade-vrtoolkit#configure-your-hmd-and-preset) 
 
-**Official Way** (*Note: VR support is not released yet*)
-
-1. Download [ReShade](https://reshade-me) from the official website.
-2. Run the installer and select the game from the list.
-3. Choose the required Rendering pipeline (modern games often use Direct3D 10/11/12)
-4. On the "Shader Effect Packages" Screen of the add the url `https://gitlab.com/Retrolux/reshade-vrtoolkit`
-   of the VRToolkit to the list. Click on Add and select the checkbox.
-5. Start up the game and enable the VRToolkit.fx effect from the list and 
-   adjust your HMD settings & preset if required *(see section below)*
 
 ## Configure your HMD and preset
 
@@ -49,11 +40,10 @@ into one single pass, while keeping the GPU overhead at a minimum.
 Hotkeys:
 --------------
 
-**CTRL+PRINT** Creates a screenshot in the `.\ReShade\Screenshots` folder
-
-**CTRL+END** Toggle all Reshade effect on/off *(Does not work in VR)*
-
-**CTRL+POS1/HOME** Enter Reshade config menu *(not visible in VR, only in the steamVR desktop window)*. Use the SteamVR Dashboard instead.
+- *CTRL+PRINT* => Creates a screenshot in the `.\ReShade\Screenshots` folder
+- *CTRL+END* => Toggle all Reshade effect on/off *(Does not work in VR)*
+- *CTRL+POS1/HOME* => Enter Reshade config menu *(not visible in VR, only in the steamVR desktop window)*.
+   Use the SteamVR Dashboard instead.
 
 Game List
 ---------
