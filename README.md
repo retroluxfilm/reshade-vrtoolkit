@@ -87,6 +87,7 @@ Additionally they contain color correction and adjustments especially created fo
 
 - Walking Dead Saints and Sinners (one eye stays black)
 - Race Room Experience (Crashes on start in VR on 32 & 64bit version)
+- Half Life Alyx (Does not hook the VR renderer)
 
 
 Known Issues & Limitations
