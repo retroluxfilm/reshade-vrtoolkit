@@ -39,6 +39,13 @@ to increase the fidelity in VR to get most out of your HMD by increasing sharpne
    Hover over the `(?) Usage Help (?)` for selectable modes.
 5. Re-enable "Performance Mode" when done 
 
+**Recommended HMD Settings**
+
+|  VR Headset (HMD)          | Circle Radius |
+| -------------------------- | ------------- |
+| Valve Index                |  0.25 to 0.3  |
+| HP G2                      |  0.41 to 0.46 |
+
 -----------------------------
 Hotkeys:
 -----------------------------
