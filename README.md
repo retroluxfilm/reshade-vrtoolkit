@@ -82,6 +82,7 @@ Additionally they contain color correction and adjustments especially created fo
 | Euro Truck Simulator 2              |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            |
 | Project Cars 2                      |          64 |  opengl32.dll  | Root Folder (next to pCARS2.exe)                 |
+| rFactor 2                           |          64 |  dxgi.dll      | Root Folder (next to rFactor2.exe)               |
 | VTOL VR                             |          64 |  dxgi.dll      | Root Folder (next to VTOLVR.exe)                 |
 
 ### Not Working
