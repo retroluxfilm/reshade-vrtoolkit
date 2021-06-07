@@ -69,15 +69,24 @@
 /**
  * Sets if the sharpening should work on the gamma corrected image to reduce artifacts.
  * This should be kept enabled and only disabled for debugging if required. 
- *
- * Mode:  0 - Disabled color correction
- *        1 - Enables Gamma corrected back buffer for sharpening
  */
 #ifndef _VRT_LINEAR_MODE
     #if VRT_SHARPENING_MODE == 2
         #define _VRT_LINEAR_MODE 1 
     #else
         #define _VRT_LINEAR_MODE 0
+    #endif
+#endif
+
+/**
+* Discards black pixels in the backbuffer to avoid gpu processing outside the viewble areas (usualy masked black) of the VR headset
+* This might cause artifacts on dark scenes that contain black pixel when heavy color corrections are applied.
+*/
+#ifndef _VRT_DISCARD_BLACK
+  #if VRT_USE_SHARPENING_MASK == 0 || VRT_COLOR_CORRECTION_MODE != 0
+    	#define _VRT_DISCARD_BLACK 1
+    #else
+        #define _VRT_DISCARD_BLACK 0
     #endif
 #endif
 
@@ -121,7 +130,7 @@ uniform int VRT_Advanced_help <
 // Textures & Sampler
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// normal backbuffer that is not scalable but works with SGSSAA 
+// normal backbuffer that is not scalable but works with SGSSA 
 sampler backBufferSampler {
     Texture = ReShade::BackBufferTex;
     //point filter for SGSSAA to avoid blur
@@ -182,7 +191,15 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 
     // fetch initial unmodified back buffer
 	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
-	backBuffer.a = 1;
+  	
+    #if _VRT_DISCARD_BLACK 
+      if (backBuffer.r <= 0.0 && backBuffer.g <= 0.0 && backBuffer.b <= 0.0)
+	       {
+		    //color.rgb = float3(1.0,0.0,1.0);
+		    //return;
+    		discard;
+	    }
+    #endif
 
     #if VRT_DITHERING
         // apply dithering before any post proceising is done
@@ -224,10 +241,10 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
         backBuffer.rgb = ColorCorrectionStep(backBuffer,position,texcoord);
     #endif
        
-   
-	
-	// pass in the modified back buffer to the output
-	color = backBuffer;
+   // pass in the modified back buffer to the output
+	color.rgb = backBuffer.rgb;
+    // force opaque post shader regardless of the input backbuffer
+	color.a = 1;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

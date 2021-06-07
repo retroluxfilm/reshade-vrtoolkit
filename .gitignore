@@ -1,5 +1,6 @@
-﻿# Idea project files
+﻿# workspace project files
 /.idea/
+/.vs/
 
 #Base Reshade headers 
 /Shaders/ReShade.fxh
