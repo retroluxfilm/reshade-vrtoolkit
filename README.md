@@ -76,6 +76,7 @@ Additionally they contain color correction and adjustments especially created fo
 | Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   |
 | Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  |
 | Beat Saber                          |          64 |  dxgi.dll      | Root Folder (next to Beat Saber.exe)             |
+| DCS World                           |          64 |  dxgi.dll      | Root Folder \bin                                 |
 | Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    |
 | Elite Dangerous                     |          64 |  d3d11.dll     | Root Folder (EliteDangerous64.exe)               |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            |
