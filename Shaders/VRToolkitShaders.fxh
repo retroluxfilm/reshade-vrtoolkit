@@ -138,7 +138,6 @@ uniform bool Preview < __UNIFORM_INPUT_BOOL1
 // RGB to YUV709 Luma
 static const float3 LumaCoefficient = float3(0.2126, 0.7152, 0.0722);
 
-
 // Overlay blending mode
 float Overlay(float LayerA, float LayerB)
 {
@@ -175,10 +174,12 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 
     // Luma high-pass color
     float HighPassColor = 0.0;
-    [unroll]
+    
+	[unroll]
     for(int s = 0; s < 4; s++)
         HighPassColor += dot(tex2D(backBufferSamplerScalable, NorSouWesEst[s]).rgb, LumaCoefficient);
-    HighPassColor = 0.5 - 0.5 * (HighPassColor * 0.25 - dot(Source, LumaCoefficient));
+    
+	HighPassColor = 0.5 - 0.5 * (HighPassColor * 0.25 - dot(Source, LumaCoefficient));
 
     // Sharpen strength
     HighPassColor = lerp(0.5, HighPassColor, Strength);
@@ -438,7 +439,7 @@ uniform float iDitheringStrength <
     ui_type = "slider";
     ui_label = "Dithering Strength";
     ui_tooltip = "Adjusts the dithering strength to reduce banding artifacts";
-    ui_min = 0.05; ui_max = 2.5;ui_step = 0.005;
+    ui_min = 0.05; ui_max = 2.5;ui_step = 0.025;
 > = 0.375;
 
 uniform float timer < source = "timer"; >;

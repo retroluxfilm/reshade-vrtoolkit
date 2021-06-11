@@ -73,25 +73,26 @@ Additionally they contain color correction and adjustments especially created fo
 
 | Game                                | DLL         | Rename To      | Drop Folder                                      |
 | ----------------------------------- | -----------:| --------------:|------------------------------------------------- |
+| American Truck Simulator            |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
 | Automobilista 2                     |          64 |  opengl32.dll  | Root Folder (next to AMS2.exe)                   |
 | Asseto Corsa Competizione           |          64 |  dxgi.dll      | Root Folder \AC2\Binaries\Win64                  |
 | Beat Saber                          |          64 |  dxgi.dll      | Root Folder (next to Beat Saber.exe)             |
 | DCS World                           |          64 |  dxgi.dll      | Root Folder \bin                                 |
 | Dirt Rally (With Revive)            |          32 |  dxgi.dll      | Root Folder (next to drt.exe)                    |
 | Elite Dangerous                     |          64 |  d3d11.dll     | Root Folder (EliteDangerous64.exe)               |
+| Euro Truck Simulator 2              |          64 |  dinput8.dll   | Root Folder \bin\win_x64                         |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | Root Folder \bin\game                            |
 | Project Cars 2                      |          64 |  opengl32.dll  | Root Folder (next to pCARS2.exe)                 |
 | rFactor 2                           |          64 |  dxgi.dll      | Root Folder \Bin64                               |
+| Skyrim VR                           |          64 |  dxgi.dll      | Root Folder (next to SkyrimVR.exe)               |
 | VTOL VR                             |          64 |  dxgi.dll      | Root Folder (next to VTOLVR.exe)                 |
 
 ### Not Working
 
+- Half Life Alyx (Works but currently only dropping it into the SteamVR\bin folder but then it hooks into home as well. Not ideal so its not under working titles)
 - Walking Dead Saints and Sinners (one eye stays black)
 - Race Room Experience (Crashes on start in VR on 32 & 64bit version)
-- Half Life Alyx (Does not hook the VR renderer)
-- Euro Truck Simulator 2 (workaround in progress)
-- American Truck Simulator (workaround in progress)
-
+- XPlane (Failed to create ImGui pipeline)
 
 Known Issues & Limitations
 ---------
