@@ -31,13 +31,13 @@ to increase the fidelity in VR to get most out of your HMD by increasing sharpne
 
 ## Configure your HMD and preset
 
-1. Open Reshade Config Menu in SteamVR (circle Reshade icon in the bottom of the dashboard)
-2. Untick "Peformance Mode" checkbox and go to the VRToolkit tab
-3. Adjust the "Circle Radius" matching your HMD field of view sweet spot and to your personal view range.
+1. Open `SteamVR Dashboard` and open the ReShade Settings (circle Reshade icon in the bottom of the dashboard)
+2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit
+3. Use your VR pointer to Adjust the `"Circle Radius"` matching your HMD field of view sweet spot and to your personal view range.
    - Keep the radius as small as possible, but as well not to small to not loose sharpness.
 4. **Optional:** Change sharpening mode and color correction mode + settings to your liking.
    Hover over the `(?) Usage Help (?)` for selectable modes.
-5. Re-enable "Performance Mode" when done 
+5. Re-enable `"Performance Mode"` when done 
 
 **Recommended HMD Settings**
 
