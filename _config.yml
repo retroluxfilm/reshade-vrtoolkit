@@ -1,2 +1,4 @@
 theme: jekyll-theme-cayman
-site.github.project_title: "VR Toolkit"
+title: VR Toolkit
+show_downloads: "true"
+
