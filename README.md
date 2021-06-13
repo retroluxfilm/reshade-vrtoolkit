@@ -1,4 +1,4 @@
-<img src="https://github.com/retroluxfilm/reshade-vrtoolkit/blob/gh-pages/assets/vrtoolkit_logo.png" width=50%>
+<img src="https://github.com/retroluxfilm/reshade-vrtoolkit/blob/gh-pages/docs/assets/images/vrtoolkit_logo.png" width=40%>
 
 The VRToolkit is a modular shader created for [ReShade](https://github.com/crosire/reshade) 
 to enhance the clarity & sharpness in VR to get most out of your HMD while keeping the performance impact minimal.
