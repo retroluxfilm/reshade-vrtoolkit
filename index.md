@@ -1,5 +1,5 @@
 ---
-site.github.project_title: VR Toolkit
+title: VR Toolkit Test
 ---
 
 Work in progress
