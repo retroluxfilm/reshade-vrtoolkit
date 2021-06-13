@@ -1,4 +1,9 @@
 ﻿---
 ---
 
-/*@import "{{ site.theme }}";*/
+@import "{{ site.theme }}";
+
+.page-header {
+  background-color: #265271;
+  background-image: none;
+}
