@@ -1,0 +1,14 @@
+﻿pages_list_title: Navigation
+pages:
+
+  - title: Introduction
+    url: index.html
+
+  - title: How to Install
+    url: install.html
+
+  - title: Configuration
+    url: configuration.html
+
+  - title: Supported Game List
+    url: gamelist.html
