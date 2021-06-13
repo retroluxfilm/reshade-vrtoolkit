@@ -1,19 +1,19 @@
-<img src="https://github.com/retroluxfilm/reshade-vrtoolkit/blob/gh-pages/assets/vrtoolkit_logo.png" width=30%>
+<img src="https://github.com/retroluxfilm/reshade-vrtoolkit/blob/gh-pages/assets/vrtoolkit_logo.png" width=50%>
 
 The VRToolkit is a modular shader created for [ReShade](https://github.com/crosire/reshade) 
-to increase the fidelity in VR to get most out of your HMD by increasing sharpness while keeping the performance impact minimal.
+to enhance the clarity & sharpness in VR to get most out of your HMD while keeping the performance impact minimal.
 
 ### Main Features
 
 - Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweep spot of your HMD
 - Color Correction Modes to be able to adjust your HMD colors & contrast to your liking
 - Dithering to reduce banding effects of gradients and sharpening artifacts
-- All modules are done in a single pass post shader to improve performance then having them all separate
+- All modules are processed in a single render pass post shader to improve performance instead of having them all separate
 
-*Note: Only works on games run through SteamVR. (OpenVR API)*
+*Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
 
 -----------------------------
- How to install
+How to install
 -----------------------------
 
 **Complete Package** *(Recommended)*
@@ -27,8 +27,9 @@ to increase the fidelity in VR to get most out of your HMD by increasing sharpne
    Usually modern games use the 64 bit version and renamed to dxgi.dll.
 5. Start up the game and [Confiure your HMD settings](https://github.com/retroluxfilm/reshade-vrtoolkit#configure-your-hmd-and-preset) 
 
-
-## Configure your HMD and preset
+-----------------------------
+Configure your HMD and preset
+-----------------------------
 
 1. Open `SteamVR Dashboard` and open the ReShade Settings (circle Reshade icon in the bottom of the dashboard)
 2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit
