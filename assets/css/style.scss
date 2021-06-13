@@ -8,7 +8,9 @@
   background-color: #265271 !important;
   background-image: none !important;
 }
-
-.page-logo {
-  background-image: "vrtoolkit_logo.png";
+.project-name {
+  background-image: url("https://raw.githubusercontent.com/retroluxfilm/reshade-vrtoolkit/gh-pages/assets/vrtoolkit_logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
