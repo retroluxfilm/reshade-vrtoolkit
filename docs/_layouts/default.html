@@ -34,7 +34,7 @@
     <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
   
     {% for item in site.data.pagelist.pages %}
-    <a href="{{ item.url }}" class="btn">{{ item.title }}</a>
+    <a href="{{ item.url }}" class="btn">{{ item.title }}#content</a>
     {% endfor %}
 
     {% if site.show_downloads %}
@@ -60,7 +60,7 @@
 -->
 
 <main id="content" class="main-content" role="main">
-    <a href="#content">
+    <a class="anchor" aria-hidden="true" href="#content"></a>
     {{ content }}
 
     <footer class="site-footer">
