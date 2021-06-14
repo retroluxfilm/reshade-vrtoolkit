@@ -35,7 +35,7 @@ $hr-border-color: #eff0f1 !default;
 
 /* scale down text */
 .main-content {
-  font-size: 1.0rem;
+  font-size:0.9rem;
 }
 
 /* new gradient colors */
@@ -67,22 +67,24 @@ $hr-border-color: #eff0f1 !default;
 
 /* navigation sidebar elements */
 .nav-sidebar {
-  background-color: #000000;
-  text-align: center;
+  background-color:#F2F2F2;
+  text-align:center
+}
+.nav-item {
+  border-style:none;
+  border-radius:0;
+  margin:0;
+  color:black
+}
+.nav-item:hover {
+  color:orange;
 }
 
-.nav-item{
-  border-style: none;
-  border-radius: 0;
-  margin: 0;
-  color: black;
+.active{
+  font-weight: bold;
+  color:orange;
 }
-.nav-item:hover{
-  color: black;
-}
-.nav-item:active{
-  color: red;
-}
+
 
 @media screen and (min-width: #{$large-breakpoint}) {
   .nav-sidebar {

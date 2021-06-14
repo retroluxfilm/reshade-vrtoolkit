@@ -51,7 +51,7 @@
 
 <nav id="nav" class="nav-sidebar" role="nav">
     {% for item in site.data.pagelist.pages %}
-        <a href="{{ item.url }}" class="btn nav-item">{{ item.title }}</a>
+        <a href="{{ item.url }}" class="btn nav-item {% if item.url == page.url %}active{% endif %}">{{ item.title }}</a>
     {% endfor %}
 </nav>
 
