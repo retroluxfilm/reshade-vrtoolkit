@@ -94,7 +94,7 @@ $hr-border-color: #eff0f1 !default;
 @media screen and (min-width: #{$medium-breakpoint}) and (max-width: #{$large-breakpoint} ) {
 
   .nav-sidebar {
-    padding:2rem 4rem;
+    padding:0rem 4rem;
   }
 }
 @media screen and (max-width: #{$medium-breakpoint}) {

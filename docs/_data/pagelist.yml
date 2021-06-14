@@ -4,11 +4,11 @@ pages:
   - title: Introduction
     url: index.html
 
-  - title: How to Install
+  - title: Installation
     url: install.html
 
   - title: Configuration
     url: configuration.html
 
-  - title: Supported Game List
+  - title: Game List
     url: gamelist.html
