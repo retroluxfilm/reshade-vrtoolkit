@@ -41,7 +41,7 @@
     {% endif %}
 
     {% for item in site.data.pagelist.pages %}
-    <a href="{{ item.url }}" class="btn"><{{ item.title }}</a>
+    <a href="{{ item.url }}" class="btn">{{ item.title }}</a>
     {% endfor %}
 </header>
 
@@ -50,7 +50,7 @@
     <ul>
         {% for item in site.data.pagelist.pages %}
         <li class="{% if item.url == page.url %}active{% endif %}">
-            <a href="{{ item.url }}" class="nav-item"><{{ item.title }}</a>
+            <a href="{{ item.url }}" class="nav-item">{{ item.title }}</a>
         </li>
         {% endfor %}
     </ul>
