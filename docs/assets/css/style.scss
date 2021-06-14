@@ -66,6 +66,17 @@ $hr-border-color: #eff0f1 !default;
   text-align: center;
 }
 
+/* alternating table row color */
+tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+/*
+table thead {
+  background-color: #fff;
+}
+*/
+
 /* -------------------
    New Elements
 ---------------------- */
