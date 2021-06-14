@@ -15,8 +15,8 @@
 
     {% seo %}
     
-    <meta property="og:image" content="{{ site.baseurl}}{{ page.image | default: site.image }}" />
-    <meta property="og:image:alt" content="{{ page.description | default: site.description | default: site.github.project_tagline }}" />
+    <meta property="og:image" content="{{ site.baseurl }}{{ page.image | default: site.image }}" />
+    <meta property="og:image:alt" content="{{ site.title }} - {{ page.description | default: site.description | default: site.github.project_tagline }}" />
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap&display=swap" as="style" type="text/css" crossorigin>
