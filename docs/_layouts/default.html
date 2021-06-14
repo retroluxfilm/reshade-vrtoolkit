@@ -15,8 +15,9 @@
 
     {% seo %}
     
+    <!-- set global open graph image not by the seo tag plugin -->
     <meta property="og:image" content="{{ site.url }}{{ page.image | default: site.image }}" />
-    <meta property="og:image:alt" content="{{ site.title }} - {{ page.description | default: site.description | default: site.github.project_tagline }}" />
+    <meta property="og:image:alt" content="{{ site.github.repository_name }} - {{ page.description | default: site.description | default: site.github.project_tagline }}" />
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap&display=swap" as="style" type="text/css" crossorigin>
