@@ -41,18 +41,18 @@
     {% endif %}
 </header>
 
+<nav id="nav" class="nav-sidebar" role="nav">
+    <!--<h2>{{ site.data.pagelist.pages_list_title }}</h2>-->
+    <ul>
+        {% for item in site.data.pagelist.pages %}
+        <li {% if item.url == page.url %}class="active"{% endif %} >
+            <a href="{{ item.url }}">{{ item.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+
 <main id="content" class="main-content" role="main">
-    <nav id="nav" class="nav-sidebar">
-        <h2>{{ site.data.pagelist.pages_list_title }}</h2>
-        <ul>
-            {% for item in site.data.pagelist.pages %}
-            <li {% if item.url == page.url %}class="active"{% endif %} >
-                <a href="{{ item.url }}">{{ item.title }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </nav>
-    
     {{ content }}
 
     <!--
