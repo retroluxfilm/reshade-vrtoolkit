@@ -1,8 +1,8 @@
 ﻿pages_list_title: Navigation
 pages:
 
-  - title: Home
-    url: /index.html
+  - title: Introduction
+    url: 
 
   - title: Installation
     url: /install.html
