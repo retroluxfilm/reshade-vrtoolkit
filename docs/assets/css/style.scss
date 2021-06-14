@@ -12,9 +12,9 @@ $header-bg-color: #265271 !default;
 $header-bg-color-secondary: #000000 !default;
 
 // Text
-$section-headings-color: #da8547 !default;
+$section-headings-color: #2387c4 !default;
 $body-text-color: #606c71 !default;
-$body-link-color: #1e6bb8 !default;
+$body-link-color: #669ed0 !default;
 $blockquote-text-color: #819198 !default;
 
 // Code
@@ -61,6 +61,11 @@ $hr-border-color: #eff0f1 !default;
   opacity: 0.7;
 }
 
+/* center footer text */
+.site-footer {
+  text-align: center;
+}
+
 /* -------------------
    New Elements
 ---------------------- */
@@ -68,21 +73,21 @@ $hr-border-color: #eff0f1 !default;
 /* navigation sidebar elements */
 .nav-sidebar {
   background-color:#F2F2F2;
-  text-align:center
+  text-align:center;
 }
 .nav-item {
   border-style:none;
   border-radius:0;
   margin:0;
-  color:black
+  color:#000000;
 }
 .nav-item:hover {
-  color:orange;
+  color:#fd8e00;
 }
 
 .active{
   font-weight: bold;
-  color:orange;
+  color:#fd8e00;
 }
 
 
@@ -102,7 +107,7 @@ $hr-border-color: #eff0f1 !default;
 
   .nav-sidebar {
     padding: 1rem 1rem;
-    font-size:1rem
+    font-size:1rem;
   }
 }
 
