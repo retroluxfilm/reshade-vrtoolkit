@@ -38,6 +38,16 @@ body {
   opacity: 0.7;
 }
 
+/* change header color */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content h4,
+.main-content h5,
+.main-content h6 {
+  color:#da8547;
+}
+
 
 /* -------------------
    New Elements
