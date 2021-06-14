@@ -3,5 +3,5 @@ show_downloads: "true"
 github:
   repository_name: "VR Toolkit"
   zip_url: https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v0.9.2-pre/VRToolkitReshadeUniversal_0.9.2-pre.zip
-logo: https://vrtoolkit.retrolux.de/assets/images/vrtoolkit_logo.png
-image: https://vrtoolkit.retrolux.de/assets/images/vrtoolkit_opengraph.png
+logo: /assets/images/vrtoolkit_logo.png
+image: /assets/images/vrtoolkit_opengraph.png
