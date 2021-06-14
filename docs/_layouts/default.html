@@ -33,9 +33,11 @@
     <h1 class="project-name" role="img" aria-label="{{ site.github.repository_name }}"></h1>
     <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
   
+    <!--
     {% for item in site.data.pagelist.pages %}
     <a href="{{ item.url }}" class="btn">{{ item.title }}</a>
     {% endfor %}
+    -->
 
     {% if site.show_downloads %}
     <a href="{{ site.github.zip_url }}" class="btn">Download</a>
@@ -47,17 +49,15 @@
 
 </header>
 
-<!--
 <nav id="nav" class="nav-sidebar" role="nav">
     <ul>
         {% for item in site.data.pagelist.pages %}
         <li class="{% if item.url == page.url %}active{% endif %}">
-            <a href="{{ item.url }}" class="nav-item">{{ item.title }}</a>
+            <a href="{{ item.url }}" class="btn nav-item">{{ item.title }}</a>
         </li>
         {% endfor %}
     </ul>
 </nav>
--->
 
 <main id="content" class="main-content" role="main">
     {{ content }}

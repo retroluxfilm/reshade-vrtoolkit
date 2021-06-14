@@ -2,13 +2,13 @@
 pages:
 
   - title: Home
-    url: index.html
+    url: /index.html
 
   - title: Installation
-    url: install.html
+    url: /install.html
 
   - title: Configuration
-    url: configuration.html
+    url: /configuration.html
 
   - title: Game List
-    url: gamelist.html
+    url: /gamelist.html
