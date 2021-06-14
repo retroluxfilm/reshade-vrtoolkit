@@ -14,6 +14,10 @@
     <meta charset="UTF-8">
 
     {% seo %}
+    
+    <meta property="og:image" content="/assets/images/vrtoolkit_opengraph.png" />
+    <meta property="og:image:alt" content="{{ page.description | default: site.description | default: site.github.project_tagline }}" />
+    
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Asap&display=swap" as="style" type="text/css" crossorigin>
     
