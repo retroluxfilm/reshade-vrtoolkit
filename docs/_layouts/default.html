@@ -15,7 +15,7 @@
 
     {% seo %}
     
-    <meta property="og:image" content="/assets/images/vrtoolkit_opengraph.png" />
+    <meta property="og:image" content="{{ page.image | default: site.image }" />
     <meta property="og:image:alt" content="{{ page.description | default: site.description | default: site.github.project_tagline }}" />
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
