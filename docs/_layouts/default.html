@@ -34,7 +34,7 @@
     <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
   
     {% for item in site.data.pagelist.pages %}
-    <a href="{{ item.url }}" class="btn">{{ item.title }}#content</a>
+    <a href="{{ item.url }}#content" class="btn">{{ item.title }}</a>
     {% endfor %}
 
     {% if site.show_downloads %}
