@@ -45,7 +45,7 @@
     <!--<h2>{{ site.data.pagelist.pages_list_title }}</h2>-->
     <ul>
         {% for item in site.data.pagelist.pages %}
-        <li {% if item.url == page.url %}class="active"{% endif %} >
+        <li class="{% if item.url == page.url %}active{% endif %}">
             <a href="{{ item.url }}">{{ item.title }}</a>
         </li>
         {% endfor %}
