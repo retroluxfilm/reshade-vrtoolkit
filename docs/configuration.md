@@ -1,7 +1,7 @@
 ﻿---
 ---
 
-Configure your HMD and preset
+Configure your HMD
 =======
 
 1. Open `SteamVR Dashboard` and open the ReShade Settings (circle Reshade icon in the bottom of the dashboard)
