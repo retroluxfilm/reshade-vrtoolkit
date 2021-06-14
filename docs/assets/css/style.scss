@@ -33,10 +33,6 @@ $hr-border-color: #eff0f1 !default;
      Adjusted cayman base css
   ---------------------- */
 
-body {
-  font-family: "Asap", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
 /* scale down text */
 .main-content {
   font-size: 1.0rem;
@@ -88,20 +84,20 @@ body {
   padding: 1rem;
 }
 
-@media screen and (min-width: { $large-breakpoint }) {
+@media screen and (min-width: #{$large-breakpoint}) {
   .nav-sidebar {
     max-width:64rem;
     padding: 0rem 6rem;
     margin: 0 auto;
   }
 }
-@media screen and (min-width: { $medium-breakpoint }) and (max-width: { $large-breakpoint } ) {
+@media screen and (min-width: #{$medium-breakpoint}) and (max-width: #{$large-breakpoint} ) {
 
   .nav-sidebar {
     padding:2rem 4rem;
   }
 }
-@media screen and (max-width: { $medium-breakpoint }) {
+@media screen and (max-width: #{$medium-breakpoint}) {
 
   .nav-sidebar {
     padding: 1rem 1rem;
