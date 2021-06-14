@@ -67,26 +67,25 @@ $hr-border-color: #eff0f1 !default;
 
 /* navigation sidebar elements */
 .nav-sidebar {
-  max-width: 64rem;
-
+  background-color: #000000;
+  text-align: center;
 }
-.nav-sidebar ul {
-  display: flex ;
-  // text-align: center;
-  padding: 0;
+
+.nav-item{
+  border-style: none;
+  border-radius: 0;
   margin: 0;
+  color: black;
 }
-
-.nav-sidebar li {
-  list-style-type:none;
-  font-weight: normal;
-  width: 100%;
-  padding: 1rem;
+.nav-item:hover{
+  color: black;
+}
+.nav-item:active{
+  color: red;
 }
 
 @media screen and (min-width: #{$large-breakpoint}) {
   .nav-sidebar {
-    max-width:64rem;
     padding: 0rem 6rem;
     margin: 0 auto;
   }
@@ -102,17 +101,6 @@ $hr-border-color: #eff0f1 !default;
   .nav-sidebar {
     padding: 1rem 1rem;
     font-size:1rem
-  }
-  .nav-sidebar ul {
-    display: block ;
-    text-align: left;
-    margin: 0;
-  }
-  .nav-sidebar li {
-    list-style-type:none;
-    font-weight: normal;
-    width: 100%;
-    padding: 0.3rem;
   }
 }
 

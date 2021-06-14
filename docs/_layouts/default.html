@@ -50,13 +50,9 @@
 </header>
 
 <nav id="nav" class="nav-sidebar" role="nav">
-    <ul>
-        {% for item in site.data.pagelist.pages %}
-        <li class="{% if item.url == page.url %}active{% endif %}">
-            <a href="{{ item.url }}" class="btn nav-item">{{ item.title }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+    {% for item in site.data.pagelist.pages %}
+        <a href="{{ item.url }}" class="btn nav-item">{{ item.title }}</a>
+    {% endfor %}
 </nav>
 
 <main id="content" class="main-content" role="main">
