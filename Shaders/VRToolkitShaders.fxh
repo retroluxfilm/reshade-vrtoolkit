@@ -439,7 +439,7 @@ uniform float iDitheringStrength <
     ui_type = "slider";
     ui_label = "Dithering Strength";
     ui_tooltip = "Adjusts the dithering strength to reduce banding artifacts";
-    ui_min = 0.05; ui_max = 2.5;ui_step = 0.025;
+    ui_min = 0.00; ui_max = 1.0;ui_step = 0.001;
 > = 0.375;
 
 uniform float timer < source = "timer"; >;
