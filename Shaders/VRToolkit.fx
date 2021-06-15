@@ -4,7 +4,7 @@
 // Combines multiple shaders usable in VR to be processed into one single pass to improve
 // performance
 //
-// by Retrolux (Alexandre Miguel Maia)
+// by Alexandre Miguel Maia - Retrolux
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #include "ReShade.fxh"
@@ -193,16 +193,14 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
   	
     #if _VRT_DISCARD_BLACK 
-      if (backBuffer.r <= 0.0 && backBuffer.g <= 0.0 && backBuffer.b <= 0.0)
-	       {
-		    //color.rgb = float3(1.0,0.0,1.0);
-		    //return;
-    		discard;
-	    }
+    if (backBuffer.r <= 0.0 && backBuffer.g <= 0.0 && backBuffer.b <= 0.0)
+    {
+        discard;
+    }
     #endif
 
     #if VRT_DITHERING
-        // apply dithering before any post proceising is done
+        // apply dithering before any post processing is done
 		backBuffer.rgb += ScreenSpaceDither(position.xy);
     #endif
 			
@@ -233,18 +231,18 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
     #if (VRT_COLOR_CORRECTION_MODE != 0)
     
         // correct backbuffer into linear mode for color corrections!
-	    #if (_VRT_LINEAR_MODE )
-	       // correct from sRGB gamma back to linear 1/2.2
-	       backBuffer.rgb = pow(backBuffer.rgb,0.454545);
-	    #endif     
+        #if (_VRT_LINEAR_MODE )
+            // correct from sRGB gamma back to linear 1/2.2
+            backBuffer.rgb = pow(backBuffer.rgb,0.454545);
+        #endif     
 	     
         backBuffer.rgb = ColorCorrectionStep(backBuffer,position,texcoord);
     #endif
        
-   // pass in the modified back buffer to the output
-	color.rgb = backBuffer.rgb;
+    // pass in the modified back buffer to the output
+    color.rgb = backBuffer.rgb;
     // force opaque post shader regardless of the input backbuffer
-	color.a = 1;
+    color.a = 1;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

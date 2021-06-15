@@ -3,7 +3,7 @@
 //
 // external shader code, modified to work with the VR toolkit.
 //
-// by Retrolux (Alexandre Miguel Maia)
+// by Alexandre Miguel Maia - Retrolux
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -202,7 +202,7 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // AMD FidelityFX Contrast Adaptive Sharpening (CAS.fx)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Copyright (c) 2017-2019 Advanced Micro Devices, Inc. All rights reserved.
+/* Copyright (c) 2017-2019 Advanced Micro Devices, Inc. All rights reserved. */
 
 #if (VRT_SHARPENING_MODE == 2)
 
