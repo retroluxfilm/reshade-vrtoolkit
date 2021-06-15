@@ -8,14 +8,14 @@ Configuration
 
 1. Open the `SteamVR Dashboard` and click on the ReShade Settings button.
 2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit.
-3. Use your VR pointer to Adjust the `"Circle Radius"` matching your HMD field of view sweet spot and to your personal view range.
-    - Keep the radius as small as possible, but as well not to small to not loose sharpness.
+3. Use your VR pointer to Adjust the [Circle Radius](#circle-radius) matching your HMD field of view sweet spot and to your personal view range.
 4. Re-enable `"Performance Mode"` when done.
 
 ![HMD Configuration](./assets/images/vrtoolkit_config.jpg "HMD Configuration")
 
 ### Circle Radius
-Try to get set up the smallest circle as possible to save GPU processing time. 
+Keep the radius as small as possible to conserve GPU time, but as well not to small to not loose sharpness. 
+
 You can use the Recommended settings below as a good staring point.
 A trick to see the mask better is to enable the `"Preview Sharpen Layer"` checkbox 
 under sharpning settings when using mode 1
