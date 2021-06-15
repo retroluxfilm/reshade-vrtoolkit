@@ -1,16 +1,36 @@
 <img src="https://github.com/retroluxfilm/reshade-vrtoolkit/blob/gh-pages/docs/assets/images/vrtoolkit_logo.png" width=500px>
 
-The VRToolkit is a modular shader created for [ReShade](https://github.com/crosire/reshade) 
+The VRToolkit is a modular shader created for [ReShade](https://github.com/crosire/reshade)
 to enhance the clarity & sharpness in VR to get most out of your HMD while keeping the performance impact minimal.
 
 ### Main Features
 
-- Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweep spot of your HMD
+- Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweet spot of your HMD
 - Color Correction Modes to be able to adjust your HMD colors & contrast to your liking
 - Dithering to reduce banding effects of gradients and sharpening artifacts
 - All modules are processed in a single render pass post shader to improve performance instead of having them all separate
 
 *Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
 
+Contribute
+---
+There might be a few things that can be improved and optimized for VR.
+Or there might be more games and HMD settings to be added to the list.
+If you want to contribute feel free to use pull requests.
 
-Visit https://vrtoolkit.retrolux.de/ for install & setup instructions
+ Credits
+---
+- [ReShade](https://github.com/crosire/reshade)
+  from Patrick Mours aka crosire
+- [Filmic Anamorphic Sharpen.fx](https://github.com/crosire/reshade-shaders/blob/master/Shaders/FilmicAnamorphSharpen.fx)
+  by Jakub Maximilian Fober
+- [LUT.fx](https://github.com/crosire/reshade-shaders/blob/slim/Shaders/LUT.fx)
+  by Marty McFly  
+- [Tonemap.fx](https://github.com/crosire/reshade-shaders/blob/master/Shaders/Tonemap.fx)
+  by Christian Cann Schuldt Jensen ~ CeeJay.dk
+- [CAS.fx](https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/CAS.fx)
+  by Advanced Micro Devices and contributors
+- [Sharpening Mask & VR Contribution for Reshade](https://github.com/fholger)
+  by Holger Frydrych
+- [Dithering](https://gdcvault.com/play/1021771/Advanced-VR)
+  by Value, programmer Lestyn
