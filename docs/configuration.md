@@ -1,22 +1,24 @@
 ﻿---
 ---
 
-Configure your HMD
+Configuration
 =======
 
+## Headset Setup
+
 1. Open the `SteamVR Dashboard` and click on the ReShade Settings button.
-2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit
+2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit.
 3. Use your VR pointer to Adjust the `"Circle Radius"` matching your HMD field of view sweet spot and to your personal view range.
     - Keep the radius as small as possible, but as well not to small to not loose sharpness.
-4. **Optional:** Change sharpening mode and color correction mode + settings to your liking.
-   Hover over the `(?) Usage Help (?)` for selectable modes.
-5. Re-enable `"Performance Mode"` when done
+4. Re-enable `"Performance Mode"` when done.
 
-< Add image here to show steam vr dashboard & reshade icon >
+![HMD Configuration](./assets/images/vrtoolkit_config.jpg "HMD Configuration")
 
 ### Circle Radius
-
-**Recommended HMD Settings**
+Try to get set up the smallest circle as possible to save GPU processing time. 
+You can use the Recommended settings below as a good staring point.
+A trick to see the mask better is to enable the `"Preview Sharpen Layer"` checkbox 
+under sharpning settings when using mode 1
 
 |  VR Headset (HMD)          | Circle Radius |
 | -------------------------- | ------------- |
@@ -24,8 +26,22 @@ Configure your HMD
 | HP G1 & G2                 |  0.41 to 0.46 |
 
 
+## Configure Preset 
+*(For Experienced Users Only)*
 
-## Hotkeys:
+You can adjust the VRToolkit settings by changing the shader modules and settings it has available.
+The base `generic_vr` preset is configured to work without modification for almost all VR titles 
+to look natural without artifacts. 
+
+Its best to work on the vr mirror on the monitor while creating a new preset and fine tweak it later in VR.
+
+1. Click on the **+** icon near the `generic_vr` preset to create a duplicate of the generic preset.
+2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit.
+3. Hover over the `(?) Usage Help (?)` on the ReShade settings menu to see available modes.
+4. Adjust settings to tweak the setting to your taste.
+5. Re-enable `"Performance Mode"` when done.
+
+### Hotkeys: 
 
 - **CTRL+PRINT** => Creates a screenshot in the `.\ReShade\Screenshots` folder
 - **CTRL+END** => Toggle all Reshade effect on/off *(Does not work in VR view yet)*

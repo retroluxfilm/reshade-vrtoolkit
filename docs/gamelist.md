@@ -4,7 +4,7 @@
 Game List
 =======
 
-### Game Presets
+## Game Presets
 These are special presets tailored for the specific game to work with additional VR Mods that would otherwise collide with the default procedure.
 Additionally they contain color corrections LUT especially created for the game.
 
@@ -37,3 +37,21 @@ Additionally they contain color corrections LUT especially created for the game.
 - Walking Dead Saints and Sinners (one eye stays black)
 - Race Room Experience (Crashes on start in VR on 32 & 64bit version)
 - XPlane (Failed to create ImGui pipeline)
+
+
+## Known Issues
+
+- **Opening the `Preprocessor Settings` in the SteamVR Reshade menu crashes the game.**
+
+  As a workaround you need to use the screen mirror to change the preprocessor settings
+  and then use the `reload button` it from the SteamVR Reshade to apply the settings.
+
+- **Left Eye stays black/flicker**
+
+  This is caused by certain vr pixel count/resolution and can be minimized/fixed by
+  going up and down a few steps until it works.
+
+- **Steam VR Reshade Settings window flicker**
+
+  This is caused when the render target switches, especially prominent on games that dynamically
+  change the resolution like Half Life Alyx does.
