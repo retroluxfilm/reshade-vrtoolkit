@@ -4,7 +4,7 @@
 Game List
 =======
 
-### Game Presets:
+### Game Presets
 These are special presets tailored for the specific game to work with additional VR Mods that would otherwise collide with the default procedure.
 Additionally they contain color corrections LUT especially created for the game.
 
