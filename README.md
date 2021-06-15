@@ -12,6 +12,11 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 
 *Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
 
+Installation & Instructions
+---
+Visit https://vrtoolkit.retrolux.de/ for install & setup instructions
+
+
 Contribute
 ---
 There might be a few things that can be improved and optimized for VR.
