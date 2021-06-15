@@ -14,8 +14,7 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 
 Installation & Instructions
 ---
-Visit https://vrtoolkit.retrolux.de/ for install & setup instructions
-
+Visit https://vrtoolkit.retrolux.de/
 
 Contribute
 ---
