@@ -22,7 +22,7 @@ under sharpning settings when using mode 1
 
 |  VR Headset (HMD)          | Circle Radius |
 | -------------------------- | ------------- |
-| Valve Index                |  0.25 to 0.35 |
+| Valve Index & Quest1       |  0.25 to 0.35 |
 | HP G1 & G2                 |  0.41 to 0.46 |
 
 

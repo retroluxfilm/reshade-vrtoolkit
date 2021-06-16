@@ -19,6 +19,7 @@ Additionally they contain color corrections LUT especially created for the game.
 | ----------------------------------- | -----------:| --------------:|------------------------------------- |
 | American Truck Simulator            |          64 |  dinput8.dll   | bin\win_x64                          |
 | Automobilista 2                     |          64 |  opengl32.dll  | next to AMS2.exe                     |
+| Asseto Corsa                        |          64 |  dxgi.dll      | next to AssettoCorsa.exe             |
 | Asseto Corsa Competizione           |          64 |  dxgi.dll      | AC2\Binaries\Win64                   |
 | Beat Saber                          |          64 |  dxgi.dll      | next to "Beat Saber.exe"             |
 | DCS World                           |          64 |  dxgi.dll      | bin                                  |
