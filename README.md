@@ -10,8 +10,6 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 - Dithering to reduce banding effects of gradients and sharpening artifacts
 - All modules are processed in a single render pass post shader to improve performance instead of having them all separate
 
-*Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
-
 Installation & Instructions
 ---
 Visit https://vrtoolkit.retrolux.de/
@@ -34,7 +32,7 @@ If you want to contribute feel free to use pull requests.
   by Christian Cann Schuldt Jensen ~ CeeJay.dk
 - [CAS.fx](https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/CAS.fx)
   by Advanced Micro Devices and contributors
-- [Sharpening Mask & VR Contribution for Reshade](https://github.com/fholger)
+- [Sharpening Mask & VR Contribution for Reshade VR support](https://github.com/fholger)
   by Holger Frydrych
 - [Dithering](https://gdcvault.com/play/1021771/Advanced-VR)
   by Value, programmer Lestyn
