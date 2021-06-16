@@ -41,6 +41,8 @@ Its best to work on the vr mirror on the monitor while creating a new preset and
 4. Adjust settings to tweak the setting to your taste.
 5. Re-enable `"Performance Mode"` when done.
 
+![VRToolkit modes](./assets/images/vrtoolkit_modes.png "VRToolkit modes")
+
 ### Hotkeys: 
 
 - **CTRL+PRINT** => Creates a screenshot in the `.\ReShade\Screenshots` folder
