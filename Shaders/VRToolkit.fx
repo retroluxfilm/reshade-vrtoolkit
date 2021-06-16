@@ -98,12 +98,11 @@
 
 
 uniform int VRT_Advanced_help <
-	ui_category = "VR Toolkit"; 
 	ui_type = "radio"; 
 	ui_label = "(?) Usage Help (?)";
-	//ui_text = 
-    // "The VR toolkit allows to use common shaders into one pass optimized for VR rendering.\n"
-    // "";
+	ui_text = 
+     "VRToolkit modes & settings:\n"
+     "";
      
      ui_tooltip =
     	" Open the \"Preprocess definitions\" section to change the folowing modes.\n"
