@@ -10,6 +10,8 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 - Dithering to reduce banding effects of gradients and sharpening artifacts
 - All modules are processed in a single render pass post shader to improve performance instead of having them all separate
 
+*Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
+
 Installation & Instructions
 ---
 Visit https://vrtoolkit.retrolux.de/
