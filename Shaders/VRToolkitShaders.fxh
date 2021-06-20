@@ -16,7 +16,28 @@ from Holger Frydrych VR_CAS_Color.fx shader
 
 #if VRT_USE_SHARPENING_MASK && VRT_SHARPENING_MODE != 0 // && __RENDERER__ >= 0xa000 // If DX10 or higher
 
-uniform int VRT_SharpeningMaskHelp <
+/**
+* Smoothes the sharpening mask transition
+*
+* Mode:  0 - Disable mask smoothing
+*        1 - Enable mask smoothing to reduce the visiblity of the edge of the mask
+*/
+#ifndef _MASK_SMOOTH
+    #define _MASK_SMOOTH 1
+#endif
+
+/**
+* Sets the sharpening mask work on the backbuffer that has both eyes merged into a single texture (left + Right)
+* This is the default behaivor from reshade right now
+* Mode:  0 - Center Mask per eye
+*        1 - Combined masks with a circle for the left eye and one for the right
+*/
+#ifndef _MASK_COMBINED_EYES
+    #define _MASK_COMBINED_EYES 1
+#endif
+
+
+uniform int SharpeningMaskHelp <
 	ui_category = "Sharpening Mask"; 
 	ui_type = "radio"; 
 	ui_label = " ";
@@ -28,15 +49,12 @@ uniform float iSharpeningCenterMaskSize <
     ui_type = "slider";
     ui_label = "Circle Radius (?)";
     ui_tooltip = "Adjusts the area that is sharpened from the center of the screen towards the edges.\n"
-                 "This can slightly improve the performance against visual quality.\n\n"
-                 "Recommended settings:\n"
-                 "                       Valve Index  => 0.25 - 0.30 \n"
-				 "                       HP G2        => 0.41 - 0.46\n"
+                 "This can slightly improve the performance the smaller the radius is.\n\n"
                  "";
     ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
 > = 0.30;
 
-#if VRT_SMOOTH_MASK
+#if _MASK_SMOOTH
 uniform float iSharpeningMaskSmoothness <
     ui_category = "Sharpening Mask";
     ui_type = "slider";
@@ -46,22 +64,16 @@ uniform float iSharpeningMaskSmoothness <
 > = 5.0;
 #endif
 
-uniform bool iSharpeningMaskCombinedEyes <
-    ui_category = "Sharpening Mask";
-    ui_label = "Single image for both eyes";
-    ui_tooltip = "For the mask setting to work properly, you need to specify if both eye views are contained in a single image or submitted as separate images.\nIf the sharpening effect looks wrong, toggle this setting and see if it improves.";
-> = true;
-
 
 float RadialSharpeningMask( float2 texcoord )
 {
     float2 fromCenter;
-    if (iSharpeningMaskCombinedEyes) 
-    {
+   
+    #if _MASK_COMBINED_EYES
         fromCenter = float2(texcoord.x < 0.5 ? 0.3 : 0.7, 0.5) - texcoord;
-    } else{
+    #else
         fromCenter = float2(0.5, 0.5) - texcoord;
-    }
+    #endif
 
     //correct aspect ratio of mask circle                   
     fromCenter.x *= ReShade::AspectRatio;
@@ -71,7 +83,7 @@ float RadialSharpeningMask( float2 texcoord )
     // just apply sharpened image when inside the center mask
     float maskSizeSqr = iSharpeningCenterMaskSize * iSharpeningCenterMaskSize;
     if (distSqr < maskSizeSqr){
-        #if VRT_SMOOTH_MASK 
+        #if _MASK_SMOOTH
             float diff = (distSqr/maskSizeSqr);
             return 1 - pow(diff,iSharpeningMaskSmoothness);
         #else

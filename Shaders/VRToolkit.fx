@@ -44,17 +44,6 @@
 #ifndef VRT_USE_SHARPENING_MASK
     #define VRT_USE_SHARPENING_MASK 1
 #endif
- 
- 
- /**
- * Smoothes the sharpening mask transition
- *
- * Mode:  0 - Disable mask smoothing
- *        1 - Enable mask smoothing to reduce the visiblity of the edge of the mask
- */
-#ifndef VRT_SMOOTH_MASK
-    #define VRT_SMOOTH_MASK 1
-#endif
 
 /**
  * Dithering Noise to reduce color banding on gradients 
@@ -63,18 +52,18 @@
  *        1 - Enable dithering that adds noise to the image to smoothen out gradients
  */
 #ifndef VRT_DITHERING
-       #define VRT_DITHERING 0
+	#define VRT_DITHERING 0
 #endif
 
 /**
  * Sets if the sharpening should work on the gamma corrected image to reduce artifacts.
  * This should be kept enabled and only disabled for debugging if required. 
  */
-#ifndef _VRT_LINEAR_MODE
+#ifndef _VRT_SRGB_BACKBUFFER
     #if VRT_SHARPENING_MODE == 2
-        #define _VRT_LINEAR_MODE 1 
+        #define _VRT_SRGB_BACKBUFFER 1 
     #else
-        #define _VRT_LINEAR_MODE 0
+        #define _VRT_SRGB_BACKBUFFER 0
     #endif
 #endif
 
@@ -124,6 +113,11 @@ uniform int VRT_Advanced_help <
 	     
     >;
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Variables (Uniform & Static)
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static const float GAMMA_SRGB_FACTOR = 1/2.2;
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Textures & Sampler
@@ -134,7 +128,7 @@ sampler backBufferSampler {
     Texture = ReShade::BackBufferTex;
     //point filter for SGSSAA to avoid blur
 	MagFilter = POINT; MinFilter = POINT;
-    #if _VRT_LINEAR_MODE 
+    #if _VRT_SRGB_BACKBUFFER 
        SRGBTexture = true;
     #endif
 };
@@ -142,7 +136,7 @@ sampler backBufferSampler {
 // scalable version of the backbuffer
 sampler backBufferSamplerScalable {
     Texture = ReShade::BackBufferTex;
-	#if _VRT_LINEAR_MODE 
+	#if _VRT_SRGB_BACKBUFFER 
        SRGBTexture = true;
     #endif
 };
@@ -192,10 +186,11 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
   	
     #if _VRT_DISCARD_BLACK 
-    if (backBuffer.r <= 0.0 && backBuffer.g <= 0.0 && backBuffer.b <= 0.0)
-    {
-        discard;
-    }
+		// discards black pixels which are usually the ones masked outside the HMD visible area
+		if (!any(backBuffer.rgb))
+	    {
+	        discard;
+	    }
     #endif
 
     #if VRT_DITHERING
@@ -213,11 +208,12 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
             if(radialSharpeningMask != 0){
                  //backBuffer.rgb = SharpeningStep(backBuffer,position,texcoord);
                 float3 sharpeningResult = SharpeningStep(backBuffer,position,texcoord);
-	            #if VRT_SMOOTH_MASK
+	            #if _MASK_SMOOTH
                 	backBuffer.rgb = lerp(backBuffer.rgb,sharpeningResult,radialSharpeningMask);
                 #else
                 	backBuffer.rgb = sharpeningResult;
                 #endif
+              
             } 
         #else
 	        // directly apply sharpening without mask
@@ -229,10 +225,10 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
    // Color Correction Step
     #if (VRT_COLOR_CORRECTION_MODE != 0)
     
-        // correct backbuffer into linear mode for color corrections!
-        #if (_VRT_LINEAR_MODE )
-            // correct from sRGB gamma back to linear 1/2.2
-            backBuffer.rgb = pow(backBuffer.rgb,0.454545);
+        // convert backbuffer into linear mode for color corrections!
+        #if (_VRT_SRGB_BACKBUFFER )
+            // convert from sRGB gamma back to linear 1/2.2
+            backBuffer.rgb = pow(backBuffer.rgb,GAMMA_SRGB_FACTOR);
         #endif     
 	     
         backBuffer.rgb = ColorCorrectionStep(backBuffer,position,texcoord);
@@ -249,17 +245,15 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 technique VRToolkit  <ui_tooltip = "This shader combines multiple shaders tailored to be usable in VR into one render pass"; >
 {
-#if (VRT_COLOR_CORRECTION_MODE != 0 ||  VRT_SHARPENING_MODE != 0 || VRT_DITHERING)
 	pass
 	{
 		VertexShader = PostProcessVS;
 		PixelShader = CombineVRShaderPS;
 
-		#if (_VRT_LINEAR_MODE && VRT_COLOR_CORRECTION_MODE == 0)
+		#if (_VRT_SRGB_BACKBUFFER && VRT_COLOR_CORRECTION_MODE == 0)
            SRGBWriteEnable = true;
         #endif
 
 	}
-#endif
 }
 
