@@ -36,13 +36,18 @@
 #endif
 
 /**
- * Masked Sharpening to reduce pixel count that is processed by the shaders
+ * Masks the center of the screen with a circle to reduce pixel count that is processed by the shaders
  *
- * Mode:  0 - Disable sharpening mask
- *        1 - Uses circular sharpening mask to improve shader performance on games rendering on DX10 or higher
+ * Mode:  0 - Disable circular masking
+ *        1 - Uses circular mask to improve shader performance on games rendering on DX10 or higher
  */
-#ifndef VRT_USE_SHARPENING_MASK
-    #define VRT_USE_SHARPENING_MASK 1
+#ifndef VRT_USE_CENTER_MASK
+	#define VRT_USE_CENTER_MASK 1
+#endif
+
+// Only allow mask for DX10 or higher as lower version does not support dynamic branching
+#if VRT_USE_CENTER_MASK && __RENDERER__ < 0xa000 
+	#define VRT_USE_CENTER_MASK 0
 #endif
 
 /**
@@ -56,14 +61,22 @@
 #endif
 
 /**
+ * Antialiasing to reduce aliasing/shimmering. This helps to further smoothen out the image after MSAA has done most of the work
+ *
+ * Mode:  0 - Disable antialiasing
+ *        1 - Enable dithering that adds noise to the image to smoothen out gradients
+ */
+#ifndef VRT_ANTIALIASING_MODE
+	#define VRT_ANTIALIASING_MODE 0
+#endif
+
+/**
  * Sets if the sharpening should work on the gamma corrected image to reduce artifacts.
  * This should be kept enabled and only disabled for debugging if required. 
  */
-#ifndef _VRT_SRGB_BACKBUFFER
-    #if VRT_SHARPENING_MODE == 2
-        #define _VRT_SRGB_BACKBUFFER 1 
-    #else
-        #define _VRT_SRGB_BACKBUFFER 0
+#ifndef _VRT_LINEAR_BACKBUFFER //|| BUFFER_COLOR_BIT_DEPTH == 10
+    #if VRT_SHARPENING_MODE == 2 //&& VRT_ANTIALIASING_MODE != 0
+        #define _VRT_LINEAR_BACKBUFFER 1
     #endif
 #endif
 
@@ -72,10 +85,8 @@
 * This might cause artifacts on dark scenes that contain black pixel when heavy color corrections are applied.
 */
 #ifndef _VRT_DISCARD_BLACK
-  #if VRT_USE_SHARPENING_MASK == 0 || VRT_COLOR_CORRECTION_MODE != 0
+  	#if VRT_USE_CENTER_MASK == 0 || VRT_COLOR_CORRECTION_MODE != 0
     	#define _VRT_DISCARD_BLACK 1
-    #else
-        #define _VRT_DISCARD_BLACK 0
     #endif
 #endif
 
@@ -84,7 +95,6 @@
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #include "ReShadeUI.fxh"
-
 
 uniform int VRT_Advanced_help <
 	ui_type = "radio"; 
@@ -104,11 +114,14 @@ uniform int VRT_Advanced_help <
         "                          1 - Uses a LUT (Look up table) for specialized and complex corrections.\n"
         "                          2 - Tonemapping to correct, gamma, exposure and color saturation.\n"
         "\n"
-        " Sharpening Masking:      0 - Disabled sharpening masking\n"
-        "                          1 - Uses circular sharpening mask to improve shader performance on games rendering on DX10 or higher.\n"
+        " Circular Masking:  	   0 - Disabled circular masking\n"
+        "                          1 - Uses circular mask to improve shader performance on games rendering on DX10 or higher.\n"
         "\n"
         " Dithering:               0 - Disable dithering\n"
         "                          1 - Enable dithering that adds noise to the image to smoothen out gradients.\n"
+     	"\n"
+        " Antialiasing Modes:      0 - Disable antialiasing\n"
+        "                          1 - FXAA\n"
         "";
 	     
     >;
@@ -128,7 +141,7 @@ sampler backBufferSampler {
     Texture = ReShade::BackBufferTex;
     //point filter for SGSSAA to avoid blur
 	MagFilter = POINT; MinFilter = POINT;
-    #if _VRT_SRGB_BACKBUFFER 
+    #if _VRT_LINEAR_BACKBUFFER 
        SRGBTexture = true;
     #endif
 };
@@ -136,11 +149,11 @@ sampler backBufferSampler {
 // scalable version of the backbuffer
 sampler backBufferSamplerScalable {
     Texture = ReShade::BackBufferTex;
-	#if _VRT_SRGB_BACKBUFFER 
+	MagFilter = LINEAR; MinFilter = LINEAR;
+	#if _VRT_LINEAR_BACKBUFFER 
        SRGBTexture = true;
     #endif
 };
-
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Shader stages
@@ -175,15 +188,53 @@ float3 ColorCorrectionStep(float4 backBuffer, float4 position , float2 texcoord 
 
 }
 
+// anti aliasing step
+float4 AntialiasingStep(float4 position , float2 texcoord ){
+
+    #if (VRT_ANTIALIASING_MODE == 1)
+        // LUT shader
+        return FXAAPixelShader(position, texcoord);
+    #endif
+}
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Main VRCombine Shader
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
 void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TEXCOORD, out float4 color : SV_Target) {
 
-    // fetch initial unmodified back buffer
-	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
+	float4 backBuffer;
+	
+    #if VRT_USE_CENTER_MASK 
+        float circularMask = CircularMask(texcoord);
+	#endif
+
+    #if (VRT_ANTIALIASING_MODE != 0)
+		
+ 		#if VRT_USE_CENTER_MASK
+ 		
+			backBuffer = tex2D(backBufferSampler, texcoord.xy);
+
+            // only apply sharpen when the mask is not black
+            if(circularMask != 0){
+
+            	//get the anti aliased backbuffer to work on 
+	            float4 antialiasedBackBuffer = AntialiasingStep(position,texcoord);
+
+	            #if _MASK_SMOOTH
+                	backBuffer.rgb = lerp(backBuffer.rgb,antialiasedBackBuffer.rgb,circularMask);
+                #else
+                	backBuffer = sharpeningResult;
+                #endif
+            } 
+        #else
+	        // directly apply anti aliasing without masking
+	        backBuffer = AntialiasingStep(position,texcoord);
+	    #endif
+	#else
+		// fetch initial unmodified back buffer
+		backBuffer = tex2D(backBufferSampler, texcoord.xy);
+	#endif
   	
     #if _VRT_DISCARD_BLACK 
 		// discards black pixels which are usually the ones masked outside the HMD visible area
@@ -200,16 +251,14 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 			
 	#if (VRT_SHARPENING_MODE != 0)
               
-        #if VRT_USE_SHARPENING_MASK && __RENDERER__ >= 0xa000 // If DX10 or higher
-         
-            float radialSharpeningMask = RadialSharpeningMask(texcoord);
+        #if VRT_USE_CENTER_MASK
          
             // only apply sharpen when the mask is not black
-            if(radialSharpeningMask != 0){
+            if(circularMask != 0){
                  //backBuffer.rgb = SharpeningStep(backBuffer,position,texcoord);
                 float3 sharpeningResult = SharpeningStep(backBuffer,position,texcoord);
 	            #if _MASK_SMOOTH
-                	backBuffer.rgb = lerp(backBuffer.rgb,sharpeningResult,radialSharpeningMask);
+                	backBuffer.rgb = lerp(backBuffer.rgb,sharpeningResult,circularMask);
                 #else
                 	backBuffer.rgb = sharpeningResult;
                 #endif
@@ -226,7 +275,7 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
     #if (VRT_COLOR_CORRECTION_MODE != 0)
     
         // convert backbuffer into linear mode for color corrections!
-        #if (_VRT_SRGB_BACKBUFFER )
+        #if (_VRT_LINEAR_BACKBUFFER )
             // convert from sRGB gamma back to linear 1/2.2
             backBuffer.rgb = pow(backBuffer.rgb,GAMMA_SRGB_FACTOR);
         #endif     
@@ -238,6 +287,13 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
     color.rgb = backBuffer.rgb;
     // force opaque post shader regardless of the input backbuffer
     color.a = 1;
+    
+    #if VRT_USE_CENTER_MASK 
+        if(iCircularMaskPreview){
+	        color.gb += circularMask * 0.25;
+        }
+	#endif
+    
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -250,7 +306,7 @@ technique VRToolkit  <ui_tooltip = "This shader combines multiple shaders tailor
 		VertexShader = PostProcessVS;
 		PixelShader = CombineVRShaderPS;
 
-		#if (_VRT_SRGB_BACKBUFFER && VRT_COLOR_CORRECTION_MODE == 0)
+		#if (_VRT_LINEAR_BACKBUFFER && VRT_COLOR_CORRECTION_MODE == 0)
            SRGBWriteEnable = true;
         #endif
 

@@ -14,10 +14,10 @@
 from Holger Frydrych VR_CAS_Color.fx shader
 */
 
-#if VRT_USE_SHARPENING_MASK && VRT_SHARPENING_MODE != 0 // && __RENDERER__ >= 0xa000 // If DX10 or higher
+#if VRT_USE_CENTER_MASK && (VRT_SHARPENING_MODE != 0 || VRT_ANTIALIASING_MODE != 0) // && __RENDERER__ >= 0xa000 // If DX10 or higher
 
 /**
-* Smoothes the sharpening mask transition
+* Smoothes the circular mask transition
 *
 * Mode:  0 - Disable mask smoothing
 *        1 - Enable mask smoothing to reduce the visiblity of the edge of the mask
@@ -27,8 +27,9 @@ from Holger Frydrych VR_CAS_Color.fx shader
 #endif
 
 /**
-* Sets the sharpening mask work on the backbuffer that has both eyes merged into a single texture (left + Right)
-* This is the default behaivor from reshade right now
+* Sets the circular mask work on the backbuffer that has both eyes merged into a single texture (left + Right)
+* This is the default behaivor from reshade right now.
+*
 * Mode:  0 - Center Mask per eye
 *        1 - Combined masks with a circle for the left eye and one for the right
 */
@@ -37,35 +38,41 @@ from Holger Frydrych VR_CAS_Color.fx shader
 #endif
 
 
-uniform int SharpeningMaskHelp <
-	ui_category = "Sharpening Mask"; 
+uniform int CircularMaskHelp <
+	ui_category = "Circular Masking Mask"; 
 	ui_type = "radio"; 
 	ui_label = " ";
 	ui_text = "IMPORTANT: Adjust \"Circle Radius\" for your VR headset below";
 >; 
 
-uniform float iSharpeningCenterMaskSize <
-    ui_category = "Sharpening Mask";
+uniform float iCircularMaskSize <
+    ui_category = "Circular Masking Mask";
     ui_type = "slider";
     ui_label = "Circle Radius (?)";
-    ui_tooltip = "Adjusts the area that is sharpened from the center of the screen towards the edges.\n"
+    ui_tooltip = "Adjusts the size of the circle from the center of the screen towards the edges.\n"
                  "This can slightly improve the performance the smaller the radius is.\n\n"
                  "";
     ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
 > = 0.30;
 
 #if _MASK_SMOOTH
-uniform float iSharpeningMaskSmoothness <
-    ui_category = "Sharpening Mask";
+uniform float iCircularMaskSmoothness <
+    ui_category = "Circular Masking Mask";
     ui_type = "slider";
     ui_label = "Mask Smoothness";
-    ui_tooltip = "Increases the smootness of the sharpening mask to allow smaller masks while reducing the prominence of the edge";
+    ui_tooltip = "Increases the smootness of the circular mask to allow smaller masks while reducing the prominence of the edge";
     ui_min = 1.0; ui_max = 10; ui_step = 0.1;
 > = 5.0;
 #endif
 
+uniform bool iCircularMaskPreview < __UNIFORM_INPUT_BOOL1
+	ui_category = "Circular Masking Mask";    
+    ui_label = "Mask Preview";
+	ui_tooltip = "Preview circular mask for easy adjustments.";
+> = false;
 
-float RadialSharpeningMask( float2 texcoord )
+
+float CircularMask( float2 texcoord )
 {
     float2 fromCenter;
    
@@ -81,11 +88,11 @@ float RadialSharpeningMask( float2 texcoord )
     float distSqr = dot(fromCenter, fromCenter);
 
     // just apply sharpened image when inside the center mask
-    float maskSizeSqr = iSharpeningCenterMaskSize * iSharpeningCenterMaskSize;
+    float maskSizeSqr = iCircularMaskSize * iCircularMaskSize;
     if (distSqr < maskSizeSqr){
         #if _MASK_SMOOTH
             float diff = (distSqr/maskSizeSqr);
-            return 1 - pow(diff,iSharpeningMaskSmoothness);
+            return 1 - pow(diff,iCircularMaskSmoothness);
         #else
             return 1;
         #endif
@@ -145,6 +152,7 @@ uniform bool Preview < __UNIFORM_INPUT_BOOL1
         	     "try changing Preprocessor Definitions in the Settings tab.";
     
 > = false;
+
 
 
 // RGB to YUV709 Luma
@@ -207,7 +215,6 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 
     // Preview mode ON
     return Preview ? HighPassColor : Sharpen;
-
 }
 #endif
 
@@ -466,4 +473,97 @@ float3 ScreenSpaceDither(float2 vScreenPos: SV_Position)
 }
 #endif
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// FXAA 3.11 Shader
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*  NVIDIA FXAA 3.11 by TIMOTHY LOTTES */
 
+
+#if (VRT_ANTIALIASING_MODE == 1)
+
+uniform int VRT_AntialiasingMode1 <
+	ui_category = "Antialiasing"; 
+	ui_type = "radio"; 
+	ui_label= " ";
+	ui_text = "MODE 1: FXAA";
+>;
+
+uniform float Subpix < __UNIFORM_SLIDER_FLOAT1
+	ui_category = "Antialiasing"; 
+	ui_min = 0.0; ui_max = 1.0;ui_step = 0.05;
+	ui_tooltip = "Amount of sub-pixel aliasing removal. Higher values makes the image softer/blurrier.";
+> = 1.0;
+
+uniform float EdgeThreshold < __UNIFORM_SLIDER_FLOAT1
+	ui_category = "Antialiasing"; 
+	ui_min = 0.0; ui_max = 1.0;ui_step = 0.005;
+	ui_label = "Edge Detection Threshold";
+	ui_tooltip = "The minimum amount of local contrast required to apply algorithm.";
+> = 0.125;
+uniform float EdgeThresholdMin < __UNIFORM_SLIDER_FLOAT1
+	ui_category = "Antialiasing"; 
+	ui_min = 0.0; ui_max = 1.0;ui_step = 0.01;
+	ui_label = "Darkness Threshold";
+	ui_tooltip = "Pixels darker than this are not processed in order to increase performance.";
+> = 0.0;
+
+//------------------------------ Non-GUI-settings -------------------------------------------------
+
+#ifndef FXAA_QUALITY__PRESET
+	// Valid Quality Presets
+	// 10 to 15 - default medium dither (10=fastest, 15=highest quality)
+	// 20 to 29 - less dither, more expensive (20=fastest, 29=highest quality)
+	// 39       - no dither, very expensive
+	#define FXAA_QUALITY__PRESET 12
+#endif
+
+
+#ifndef FXAA_GREEN_AS_LUMA
+	#define FXAA_GREEN_AS_LUMA 1
+#endif
+
+//-------------------------------------------------------------------------------------------------
+
+#if (__RENDERER__ == 0xb000 || __RENDERER__ == 0xb100 || __RENDERER__ >= 0x10000)
+	#define FXAA_GATHER4_ALPHA 1
+	#if (__RESHADE__ < 40800)
+		#define FxaaTexAlpha4(t, p) tex2Dgather(t, p, 3)
+		#define FxaaTexOffAlpha4(t, p, o) tex2Dgatheroffset(t, p, o, 3)
+		#define FxaaTexGreen4(t, p) tex2Dgather(t, p, 1)
+		#define FxaaTexOffGreen4(t, p, o) tex2Dgatheroffset(t, p, o, 1)
+	#else
+		#define FxaaTexAlpha4(t, p) tex2DgatherA(t, p)
+		#define FxaaTexOffAlpha4(t, p, o) tex2DgatherA(t, p, o)
+		#define FxaaTexGreen4(t, p) tex2DgatherG(t, p)
+		#define FxaaTexOffGreen4(t, p, o) tex2DgatherG(t, p, o)
+	#endif
+#endif
+
+#define FXAA_PC 1
+#define FXAA_HLSL_3 1
+
+#include "FXAA.fxh"
+
+
+float4 FXAAPixelShader(float4 vpos : SV_Position, float2 texcoord : TEXCOORD) : COLOR
+{
+	return FxaaPixelShader(
+		texcoord, // pos
+		0, // fxaaConsolePosPos
+		backBufferSamplerScalable, // tex
+		backBufferSamplerScalable, // fxaaConsole360TexExpBiasNegOne
+		backBufferSamplerScalable, // fxaaConsole360TexExpBiasNegTwo
+		BUFFER_PIXEL_SIZE, // fxaaQualityRcpFrame
+		0, // fxaaConsoleRcpFrameOpt
+		0, // fxaaConsoleRcpFrameOpt2
+		0, // fxaaConsole360RcpFrameOpt2
+		Subpix, // fxaaQualitySubpix
+		EdgeThreshold, // fxaaQualityEdgeThreshold
+		EdgeThresholdMin, // fxaaQualityEdgeThresholdMin
+		0, // fxaaConsoleEdgeSharpness
+		0, // fxaaConsoleEdgeThreshold
+		0, // fxaaConsoleEdgeThresholdMin
+		0 // fxaaConsole360ConstDir
+	);
+}
+#endif
