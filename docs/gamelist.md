@@ -14,8 +14,11 @@ Additionally they contain color corrections LUT especially created for the game.
 
 
 ### Working
+Here is a list of tested games that work with ReShade.
+Many more will work and require to figure out what settings it needs.
+Feel free to contribute to get that list up to date :)
 
-| Game                                | DLL         | Rename To      | Extract to Folder               |
+| Game                                | DLL         | Rename To      | Extract to Folder                    |
 | ----------------------------------- | -----------:| --------------:|------------------------------------- |
 | American Truck Simulator            |          64 |  dinput8.dll   | bin\win_x64                          |
 | Automobilista 2                     |          64 |  opengl32.dll  | next to AMS2.exe                     |
