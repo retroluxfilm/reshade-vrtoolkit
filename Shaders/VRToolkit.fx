@@ -98,7 +98,7 @@
 
 uniform int VRT_Advanced_help <
 	ui_type = "radio"; 
-	ui_label = "(?) Usage Help (?)";
+	ui_label = "(?) Modes Info";
 	ui_text = 
      "VRToolkit modes & settings:\n"
      "";
