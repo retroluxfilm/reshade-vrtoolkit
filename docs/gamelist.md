@@ -15,7 +15,7 @@ Additionally they contain color corrections LUT especially created for the game.
 
 ### Working
 
-| Game                                | DLL         | Rename To      | Game Root Drop Folder                |
+| Game                                | DLL         | Rename To      | Extract to Folder               |
 | ----------------------------------- | -----------:| --------------:|------------------------------------- |
 | American Truck Simulator            |          64 |  dinput8.dll   | bin\win_x64                          |
 | Automobilista 2                     |          64 |  opengl32.dll  | next to AMS2.exe                     |

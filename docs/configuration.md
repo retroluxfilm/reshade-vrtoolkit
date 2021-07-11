@@ -18,12 +18,14 @@ Keep the radius as small as possible to conserve GPU time, but as well not to sm
 
 You can use the Recommended settings below as a good staring point.
 A trick to see the mask better is to enable the `"Preview Sharpen Layer"` checkbox 
-under sharpning settings when using mode 1
+under sharpening settings when using mode 1
 
-|  VR Headset (HMD)          | Circle Radius |
-| -------------------------- | ------------- |
-| Valve Index & Quest1       |  0.25 to 0.35 |
-| HP G1 & G2                 |  0.41 to 0.46 |
+|  VR Headset (HMD)                      | Circle Radius |
+| -------------------------------------- | ------------- |
+| Valve Index                            |  0.30 to 0.35 |
+| Oculus Quest1                          |  0.30 to 0.35 |
+| HP G1 & G2                             |  0.41 to 0.46 |
+| Pimax 5k Large FOV, No PP              |  +- 0.75      |
 
 
 ## Configure Preset 
