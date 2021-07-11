@@ -59,6 +59,3 @@ Feel free to contribute to get that list up to date :)
 
   This is caused when the render target switches, especially prominent on games that dynamically
   change the resolution like Half Life Alyx does.
-
-
-{{ site.github | inspect }}
