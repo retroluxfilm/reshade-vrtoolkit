@@ -65,6 +65,14 @@ uniform float iCircularMaskSmoothness <
 > = 5.0;
 #endif
 
+uniform float iCircularMaskHorizontalOffset <
+    ui_category = "Circular Masking Mask";
+    ui_type = "slider";
+    ui_label = "Horizional offset";
+    ui_tooltip = "Adjusts the mask offset from the center horizontally";
+    ui_min = 0.3; ui_max = 0.5; ui_step = 0.001;
+> = 0.3;
+
 uniform bool iCircularMaskPreview < __UNIFORM_INPUT_BOOL1
 	ui_category = "Circular Masking Mask";    
     ui_label = "Mask Preview";
@@ -77,7 +85,7 @@ float CircularMask( float2 texcoord )
     float2 fromCenter;
    
     #if _MASK_COMBINED_EYES
-        fromCenter = float2(texcoord.x < 0.5 ? 0.3 : 0.7, 0.5) - texcoord;
+        fromCenter = float2(texcoord.x < 0.5 ? iCircularMaskHorizontalOffset :  1 - iCircularMaskHorizontalOffset, 0.5) - texcoord;
     #else
         fromCenter = float2(0.5, 0.5) - texcoord;
     #endif

@@ -114,7 +114,7 @@ uniform int VRT_Advanced_help <
         "                          1 - Uses a LUT (Look up table) for specialized and complex corrections.\n"
         "                          2 - Tonemapping to correct, gamma, exposure and color saturation.\n"
         "\n"
-        " Circular Masking:  	   0 - Disabled circular masking\n"
+        " Circular Masking:        0 - Disabled circular masking\n"
         "                          1 - Uses circular mask to improve shader performance on games rendering on DX10 or higher.\n"
         "\n"
         " Dithering:               0 - Disable dithering\n"
@@ -283,17 +283,18 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
         backBuffer.rgb = ColorCorrectionStep(backBuffer,position,texcoord);
     #endif
        
-    // pass in the modified back buffer to the output
+	#if VRT_USE_CENTER_MASK 
+        if(iCircularMaskPreview){
+	        backBuffer.gb += circularMask * 0.20;
+        }
+	#endif  
+
+  // pass in the modified back buffer to the output
     color.rgb = backBuffer.rgb;
     // force opaque post shader regardless of the input backbuffer
     color.a = 1;
-    
-    #if VRT_USE_CENTER_MASK 
-        if(iCircularMaskPreview){
-	        color.gb += circularMask * 0.15;
-        }
-	#endif
-    
+  
+   
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
