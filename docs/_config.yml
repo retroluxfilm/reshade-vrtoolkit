@@ -5,4 +5,3 @@ github:
   zip_url: https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v0.9.3-pre/VRToolkitReshadeUniversal_0.9.3-pre.zip
 logo: /assets/images/vrtoolkit_logo.png
 image: /assets/images/vrtoolkit_opengraph.png
-testdownload: {{ site.github.latest_release.assets[0].browser_download_url }}
