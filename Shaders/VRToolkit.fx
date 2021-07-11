@@ -290,7 +290,7 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
     
     #if VRT_USE_CENTER_MASK 
         if(iCircularMaskPreview){
-	        color.gb += circularMask * 0.25;
+	        color.gb += circularMask * 0.15;
         }
 	#endif
     

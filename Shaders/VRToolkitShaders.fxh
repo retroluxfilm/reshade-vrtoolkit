@@ -249,39 +249,57 @@ uniform float Sharpening <
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
 > = 1.0;
 
+
+// RGB to YUV709 Luma
+static const float2 pixelOffset = BUFFER_PIXEL_SIZE * 0.5;
+
 float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : TexCoord) : COLOR
 {
-    // fetch a 3x3 neighborhood around the pixel 'e',
-    //  a b c
-    //  d(e)f
-    //  g h i
+	// fetch a 3x3 neighborhood around the pixel 'e',
+	//  a b c
+	//  d(e)f
+	//  g h i
+	
+	float3 b = tex2Doffset(backBufferSampler, texcoord, int2(0, -1)).rgb;
+	float3 d = tex2Doffset(backBufferSampler, texcoord, int2(-1, 0)).rgb;
+ 
+#if __RENDERER__ >= 0xa000 // If DX10 or higher
+	float4 red_efhi = tex2DgatherR(backBufferSampler, texcoord + pixelOffset);
+	
+	//float3 e = float3( red_efhi.w, red_efhi.w, red_efhi.w);
+	float3 e = backBuffer.rgb;
+	float3 f = float3( red_efhi.z, red_efhi.z, red_efhi.z);
+	float3 h = float3( red_efhi.x, red_efhi.x, red_efhi.x);
+	float3 i = float3( red_efhi.y, red_efhi.y, red_efhi.y);
+	
+	float4 green_efhi = tex2DgatherG(backBufferSampler, texcoord + pixelOffset);
+	
+	//e.g = green_efhi.w;
+	f.g = green_efhi.z;
+	h.g = green_efhi.x;
+	i.g = green_efhi.y;
+	
+	float4 blue_efhi = tex2DgatherB(backBufferSampler, texcoord + pixelOffset);
+	
+	//e.b = blue_efhi.w;
+	f.b = blue_efhi.z;
+	h.b = blue_efhi.x;
+	i.b = blue_efhi.y;
 
-    float3 a = tex2Doffset(backBufferSampler, texcoord, int2(-1, -1)).rgb;
-    float3 b = tex2Doffset(backBufferSampler, texcoord, int2(0, -1)).rgb;
-    float3 c = tex2Doffset(backBufferSampler, texcoord, int2(1, -1)).rgb;
-    float3 d = tex2Doffset(backBufferSampler, texcoord, int2(-1, 0)).rgb;
-
-    float3 g = tex2Doffset(backBufferSampler, texcoord, int2(-1, 1)).rgb;
-
-// Disabled for now as VR has artifacts not matching both eyes correctly
-#if 0 // __RENDERER__ >= 0xa000 // If DX10 or higher
-	float4 red_efhi = tex2DgatherR(backBufferSampler, texcoord);
-	float4 green_efhi = tex2DgatherG(backBufferSampler, texcoord);
-	float4 blue_efhi = tex2DgatherB(backBufferSampler, texcoord);
-
-    float3 e = float3( red_efhi.w, green_efhi.w, blue_efhi.w);
-    float3 f = float3( red_efhi.z, green_efhi.z, blue_efhi.z);
-    float3 h = float3( red_efhi.x, green_efhi.x, blue_efhi.x);
-    float3 i = float3( red_efhi.y, green_efhi.y, blue_efhi.y);
 
 #else // If DX9
-    float3 e = backBuffer.rgb;
-    float3 f = tex2Doffset(backBufferSampler, texcoord, int2(1, 0)).rgb;
+	float3 e = backBuffer.rgb;
+	float3 f = tex2Doffset(backBufferSampler, texcoord, int2(1, 0)).rgb;
 
-    float3 h = tex2Doffset(backBufferSampler, texcoord, int2(0, 1)).rgb;
-    float3 i = tex2Doffset(backBufferSampler, texcoord, int2(1, 1)).rgb;
+	float3 h = tex2Doffset(backBufferSampler, texcoord, int2(0, 1)).rgb;
+	float3 i = tex2Doffset(backBufferSampler, texcoord, int2(1, 1)).rgb;
 
 #endif
+
+	float3 g = tex2Doffset(backBufferSampler, texcoord, int2(-1, 1)).rgb; 
+	float3 a = tex2Doffset(backBufferSampler, texcoord, int2(-1, -1)).rgb;
+	float3 c = tex2Doffset(backBufferSampler, texcoord, int2(1, -1)).rgb;
+   
 
 	// Soft min and max.
 	//  a b c             b
