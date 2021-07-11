@@ -1,10 +1,13 @@
 ﻿---
 ---
 
-## Jekyll testing page
+Jekyll testing page
+===
 
-Version Download Tester:
+### Version Download Tester:
+
 [{{ site.github.latest_release.tag_name }}]({{ site.testdownload }})
 
-Site github contents:
+### Site github contents:
+
 {{ site.github | inspect }}
