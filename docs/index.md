@@ -12,6 +12,7 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 - Sharpening Modes for enhanced clarity while only processing the pixels that are in the sweet spot of your HMD
 - Color Correction Modes to be able to adjust your HMD colors & contrast to your liking
 - Dithering to reduce banding effects of gradients and sharpening artifacts
+- Antialiasing option to reduce aliasing/shimmering effects when the in game AA modes are not enough
 - All modules are processed in a single render pass post shader to improve performance instead of having them all separate
 
 *Note: ReShade currently only works on games run through SteamVR. (OpenVR API)*
@@ -19,17 +20,17 @@ to enhance the clarity & sharpness in VR to get most out of your HMD while keepi
 
 ### 100% Crop Comparision:
 Check out in full screen to see the difference better.
-(Still its not comparable as it looks in VR)
+(Still its not comparable as how much better it looks in VR)
 
 #### Half Life Alyx
-begining scene that shows a crop of the center of the left eye.
+Beginning scene that shows a crop of the center of the left eye.
 
 ![100% Crop Alyx](./assets/images/vrtoolkit_comparision_alyx_crop.jpg "100% Crop Alyx")
 **Left:** Original **Right:** VRToolkit 
 
 [Show Full Image](./assets/images/vrtoolkit_comparision_alyx_full.jpg)
 
-#### Automobilista VR
+#### Automobilista VR MOD
 Adelaide 1988 Racetrack Dequetteville Hairpin
 
 ![100% Crop Automobilista](./assets/images/vrtoolkit_comparision_ams_crop.jpg "100% Crop Automobilista")
