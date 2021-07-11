@@ -47,7 +47,7 @@
 
 // Only allow mask for DX10 or higher as lower version does not support dynamic branching
 #if VRT_USE_CENTER_MASK && __RENDERER__ < 0xa000 
-	#define VRT_USE_CENTER_MASK 0
+	#undef VRT_USE_CENTER_MASK
 #endif
 
 /**
