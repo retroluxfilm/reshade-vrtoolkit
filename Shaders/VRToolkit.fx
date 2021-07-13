@@ -203,7 +203,16 @@ float4 AntialiasingStep(float4 position , float2 texcoord ){
 
 void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TEXCOORD, out float4 color : SV_Target) {
 
-	float4 backBuffer;
+	// fetch initial unmodified back buffer
+	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
+
+    #if _VRT_DISCARD_BLACK 
+		// discards black pixels which are usually the ones masked outside the HMD visible area 
+		if (!any(backBuffer.rgb))
+	    {
+	        discard;
+	    }
+    #endif
 	
     #if VRT_USE_CENTER_MASK 
         float circularMask = CircularMask(texcoord);
@@ -213,9 +222,7 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 		
  		#if VRT_USE_CENTER_MASK
  		
-			backBuffer = tex2D(backBufferSampler, texcoord.xy);
-
-            // only apply sharpen when the mask is not black
+	        // only apply sharpen when the mask is not black
             if(circularMask != 0){
 
             	//get the anti aliased backbuffer to work on 
@@ -231,19 +238,8 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 	        // directly apply anti aliasing without masking
 	        backBuffer = AntialiasingStep(position,texcoord);
 	    #endif
-	#else
-		// fetch initial unmodified back buffer
-		backBuffer = tex2D(backBufferSampler, texcoord.xy);
 	#endif
   	
-    #if _VRT_DISCARD_BLACK 
-		// discards black pixels which are usually the ones masked outside the HMD visible area
-		if (!any(backBuffer.rgb))
-	    {
-	        discard;
-	    }
-    #endif
-
     #if VRT_DITHERING
         // apply dithering before any post processing is done
 		backBuffer.rgb += ScreenSpaceDither(position.xy);

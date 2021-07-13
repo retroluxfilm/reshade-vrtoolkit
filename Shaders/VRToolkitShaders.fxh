@@ -518,14 +518,14 @@ uniform float Subpix < __UNIFORM_SLIDER_FLOAT1
 	ui_category = "Antialiasing"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.05;
 	ui_tooltip = "Amount of sub-pixel aliasing removal. Higher values makes the image softer/blurrier.";
-> = 1.0;
+> = 0.5;
 
 uniform float EdgeThreshold < __UNIFORM_SLIDER_FLOAT1
 	ui_category = "Antialiasing"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.005;
 	ui_label = "Edge Detection Threshold";
 	ui_tooltip = "The minimum amount of local contrast required to apply algorithm.";
-> = 0.125;
+> = 0.5;
 uniform float EdgeThresholdMin < __UNIFORM_SLIDER_FLOAT1
 	ui_category = "Antialiasing"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.01;
