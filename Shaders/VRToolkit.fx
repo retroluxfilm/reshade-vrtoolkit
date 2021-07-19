@@ -201,17 +201,18 @@ float4 AntialiasingStep(float4 position , float2 texcoord ){
 // Main VRCombine Shader
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TEXCOORD, out float4 color : SV_Target) {
+float4 CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TEXCOORD) : SV_Target {
 
-	// fetch initial unmodified back buffer
-	float4 backBuffer = tex2D(backBufferSampler, texcoord.xy);
+	// fetch initial unmodified back buffer but force opaque alpha
+	float4 backBuffer = float4(tex2D(backBufferSampler, texcoord.xy).rgb, 1.0);
 
     #if _VRT_DISCARD_BLACK 
 		// discards black pixels which are usually the ones masked outside the HMD visible area 
 		if (!any(backBuffer.rgb))
-	    {
-	        discard;
-	    }
+		{
+			discard;
+			//return float4(1,0,1,1);
+		}
     #endif
 	
     #if VRT_USE_CENTER_MASK 
@@ -286,11 +287,7 @@ void CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : TE
 	#endif  
 
   // pass in the modified back buffer to the output
-    color.rgb = backBuffer.rgb;
-    // force opaque post shader regardless of the input backbuffer
-    color.a = 1;
-  
-   
+   return backBuffer;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

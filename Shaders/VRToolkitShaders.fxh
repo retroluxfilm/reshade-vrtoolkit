@@ -176,6 +176,18 @@ float Overlay(float LayerA, float LayerB)
     return 2.0 * (MinA * MinB + MaxA + MaxB - MaxA * MaxB) - 1.5;
 }
 
+
+// Overlay blending mode with rgb values
+float3 Overlay3(float3 LayerA, float3 LayerB)
+{
+    float3 MinA = min(LayerA, 0.5);
+    float3 MinB = min(LayerB, 0.5);
+    float3 MaxA = max(LayerA, 0.5);
+    float3 MaxB = max(LayerB, 0.5);
+    return 2.0 * (MinA * MinB + MaxA + MaxB - MaxA * MaxB) - 1.5;
+}
+
+
 // Overlay blending mode for one input
 float Overlay(float LayerAB)
 {
@@ -197,7 +209,7 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
         float2(UvCoord.x, UvCoord.y + Pixel.y),
         float2(UvCoord.x, UvCoord.y - Pixel.y),
         float2(UvCoord.x + Pixel.x, UvCoord.y),
-        float2(UvCoord.x - Pixel.x, UvCoord.y)
+        float2(UvCoord.x - Pixel.x, UvCoord.y) 
     };
 
     // Luma high-pass color
@@ -210,16 +222,12 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 	HighPassColor = 0.5 - 0.5 * (HighPassColor * 0.25 - dot(Source, LumaCoefficient));
 
     // Sharpen strength
-    HighPassColor = lerp(0.5, HighPassColor, Strength);
+    HighPassColor = lerp(0.5, HighPassColor, Strength );
 
     // Clamping sharpen
-    HighPassColor = (Clamp != 1.0) ? max(min(HighPassColor, Clamp), 1.0 - Clamp) : HighPassColor;
+    HighPassColor = max(min(HighPassColor, Clamp), 1.0 - Clamp);
 
-    float3 Sharpen = float3(
-        Overlay(Source.r, HighPassColor),
-        Overlay(Source.g, HighPassColor),
-        Overlay(Source.b, HighPassColor)
-    );
+	float3 Sharpen = saturate(Overlay3(Source,HighPassColor.rrr));
 
     // Preview mode ON
     return Preview ? HighPassColor : Sharpen;
