@@ -5,8 +5,10 @@ Configuration
 =======
 
 ## Headset Setup
+**Note:** First start the game where you have installed the toolkit to see the ReShade settings button.
+(Ensure that you are in a VR scene for it to appear on a game that has been modded to work in VR)
 
-1. Open the `SteamVR Dashboard` and click on the ReShade Settings button.
+1. Open the `SteamVR Dashboard` and click on the ReShade Settings button. (Game needs to be started in VR)
 2. Un-tick `"Performance Mode"` checkbox to see the settings of the VRToolkit.
 3. Use your VR pointer to Adjust the [Circle Mask](#circle-mask) matching your HMD field of view sweet spot and to your personal view range.
 4. Re-enable `"Performance Mode"` when done.
