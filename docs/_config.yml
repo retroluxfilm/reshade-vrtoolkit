@@ -1,4 +1,4 @@
-theme: cayman
+remote_theme: jekyll-theme-cayman
 show_downloads: "true"
 github:
   repository_name: "VR Toolkit"
