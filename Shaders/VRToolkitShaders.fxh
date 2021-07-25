@@ -38,14 +38,14 @@ from Holger Frydrych VR_CAS_Color.fx shader
 #endif
 
 
-uniform int CircularMaskHelp <
+uniform int _CircularMaskHelp <
 	ui_category = "Circular Masking Mask"; 
 	ui_type = "radio"; 
 	ui_label = " ";
-	ui_text = "IMPORTANT: Adjust \"Circle Radius\" for your VR headset below";
+	ui_text = "NOTE: Adjust \"Circle Radius\" for your VR headset below";
 >; 
 
-uniform float iCircularMaskSize <
+uniform float CircularMaskSize <
     ui_category = "Circular Masking Mask";
     ui_type = "slider";
     ui_label = "Circle Radius (?)";
@@ -56,7 +56,7 @@ uniform float iCircularMaskSize <
 > = 0.30;
 
 #if _MASK_SMOOTH
-uniform float iCircularMaskSmoothness <
+uniform float CircularMaskSmoothness <
     ui_category = "Circular Masking Mask";
     ui_type = "slider";
     ui_label = "Mask Smoothness";
@@ -65,7 +65,7 @@ uniform float iCircularMaskSmoothness <
 > = 5.0;
 #endif
 
-uniform float iCircularMaskHorizontalOffset <
+uniform float CircularMaskHorizontalOffset <
     ui_category = "Circular Masking Mask";
     ui_type = "slider";
     ui_label = "Horizional offset";
@@ -73,7 +73,7 @@ uniform float iCircularMaskHorizontalOffset <
     ui_min = 0.3; ui_max = 0.5; ui_step = 0.001;
 > = 0.3;
 
-uniform bool iCircularMaskPreview < __UNIFORM_INPUT_BOOL1
+uniform bool CircularMaskPreview < __UNIFORM_INPUT_BOOL1
 	ui_category = "Circular Masking Mask";    
     ui_label = "Mask Preview";
 	ui_tooltip = "Preview circular mask for easy adjustments.";
@@ -85,7 +85,7 @@ float CircularMask( float2 texcoord )
     float2 fromCenter;
    
     #if _MASK_COMBINED_EYES
-        fromCenter = float2(texcoord.x < 0.5 ? iCircularMaskHorizontalOffset :  1 - iCircularMaskHorizontalOffset, 0.5) - texcoord;
+        fromCenter = float2(texcoord.x < 0.5 ? CircularMaskHorizontalOffset :  1 - CircularMaskHorizontalOffset, 0.5) - texcoord;
     #else
         fromCenter = float2(0.5, 0.5) - texcoord;
     #endif
@@ -96,11 +96,11 @@ float CircularMask( float2 texcoord )
     float distSqr = dot(fromCenter, fromCenter);
 
     // just apply sharpened image when inside the center mask
-    float maskSizeSqr = iCircularMaskSize * iCircularMaskSize;
+    float maskSizeSqr = CircularMaskSize * CircularMaskSize;
     if (distSqr < maskSizeSqr){
         #if _MASK_SMOOTH
             float diff = (distSqr/maskSizeSqr);
-            return 1 - pow(diff,iCircularMaskSmoothness);
+            return 1 - pow(diff,CircularMaskSmoothness);
         #else
             return 1;
         #endif
@@ -125,16 +125,9 @@ http://creativecommons.org/licenses/by-sa/4.0/.
 
 #if (VRT_SHARPENING_MODE == 1)
 
-uniform int VRT_SharpeningMode1 <
-	ui_category = "Sharpening"; 
-	ui_type = "radio"; 
-	ui_label = " ";
-	ui_text = "MODE 1: Filmic Anamorph Sharpen";
->; 
-
 uniform float Strength < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Strength";
-    ui_category = "Sharpening";
+    ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 500; ui_step = 1;
 > = 250.0;
@@ -142,19 +135,19 @@ uniform float Strength < __UNIFORM_SLIDER_FLOAT1
 uniform float Offset < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Radius";
     ui_tooltip = "High-pass cross offset in pixels";
-    ui_category = "Sharpening";
+    ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_min = 0.0; ui_max = 2.0; ui_step = 0.01;
 > = 0.10;
 
 uniform float Clamp < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Clamping";
-    ui_category = "Sharpening";
+    ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_min = 0.5; ui_max = 1.0; ui_step = 0.001;
 > = 0.525;
 
 uniform bool Preview < __UNIFORM_INPUT_BOOL1
     ui_label = "Preview sharpen layer";
-	ui_category = "Sharpening";    
+	ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";    
 	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n"
     		     "If you don't see red strokes,\n"
         	     "try changing Preprocessor Definitions in the Settings tab.";
@@ -241,18 +234,11 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 
 #if (VRT_SHARPENING_MODE == 2)
 
-uniform int VRT_SharpeningMode2 <
-	ui_category = "Sharpening"; 
-	ui_type = "radio"; 
-	ui_label = " ";
-	ui_text = "MODE 2: AMD Fidelity FX (CAS)";
->;
-
 uniform float Contrast <
 	ui_type = "slider";
     ui_label = "Contrast Adaptation";
     ui_tooltip = "Adjusts the range the shader adapts to high contrast (0 is not all the way off).  Higher values = more high contrast sharpening.";
-    ui_category = "Sharpening";
+    ui_category = "Sharpening (MODE 2: CAS)";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 1.0;  ui_step = 0.01;
 > = 0.0;
@@ -261,7 +247,7 @@ uniform float Sharpening <
 	ui_type = "slider";
     ui_label = "Sharpening intensity";
     ui_tooltip = "Adjusts sharpening intensity by averaging the original pixels to the sharpened result.  1.0 is the unmodified default.";
-    ui_category = "Sharpening";
+    ui_category = "Sharpening (MODE 2: CAS)";
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
 > = 1.0;
 
@@ -383,12 +369,11 @@ static const float2 LUT_TEXEL_SIZE = float2(1.0 /_fLUT_TileSizeXY / _fLUT_TileAm
 texture texLUT < source = fLUT_TextureName; > { Width = _fLUT_TileSizeXY*_fLUT_TileAmount; Height = _fLUT_TileSizeXY; Format = RGBA8; };
 sampler	SamplerLUT 	{ Texture = texLUT; };
 
-uniform int VRT_ColorCorrectionMode1 <
-	ui_category = "Color Correction"; 
+uniform int _VRT_ColorCorrectionMode1 <
+	ui_category = "Color Correction (MODE 1: LUT)"; 
 	ui_type = "radio"; 
-	ui_label= "(?) Important Note (?)";
-	ui_text = "MODE 1: LUT (image based Look Up Table)";
-	ui_tooltip =
+	ui_label= " ";
+	ui_text =
 		"NOTE: For the LUT to work you need to define a proper lut texture in\n"
         "the \"Preprocessor definitions\" other than the default \"lut.png\"!";
 >;
@@ -397,14 +382,14 @@ uniform float fLUT_AmountChroma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT chroma amount";
     ui_tooltip = "Intensity of color/chroma change of the LUT.";
-    ui_category = "Color Correction";
+    ui_category = "Color Correction (MODE 1: LUT)";
 > = 1.00;
 
 uniform float fLUT_AmountLuma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT luma amount";
     ui_tooltip = "Intensity of luma change of the LUT.";
-    ui_category = "Color Correction";
+    ui_category = "Color Correction (MODE 1: LUT)";
 > = 1.00;
 
 float3 PS_LUT_Apply(float4 backbuffer, float4 vpos : SV_Position, float2 texcoord : TEXCOORD) : COLOR
@@ -431,49 +416,77 @@ float3 PS_LUT_Apply(float4 backbuffer, float4 vpos : SV_Position, float2 texcoor
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Tonemap shader (Tonemap.fx)
+// Contrast & Saturation
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /**
- * Tonemap version 1.1
+ * Uses elements from Curves and own extensions 
  * by Christian Cann Schuldt Jensen ~ CeeJay.dk
  */
 
 #if (VRT_COLOR_CORRECTION_MODE == 2)
 
-uniform int VRT_ColorCorrectionMode2 <
-	ui_category = "Color Correction"; 
-	ui_type = "radio"; 
-	ui_label = " ";
-	ui_text = "MODE 2: Tonemapping";
->;
+#ifndef _CURVES_FORMULA
+    #define _CURVES_FORMULA 3
+#endif
 
-uniform float Gamma < __UNIFORM_SLIDER_FLOAT1
-	ui_min = 0.0; ui_max = 2.0;ui_step = 0.01;
-	ui_tooltip = "Adjust midtones. 1.0 is neutral. This setting does exactly the same as the one in Lift Gamma Gain, only with less control.";
-    ui_category = "Color Correction";
-> = 1.0;
-uniform float Exposure < __UNIFORM_SLIDER_FLOAT1
-	ui_min = -1.0; ui_max = 1.0;ui_step = 0.01;
-	ui_tooltip = "Adjust exposure";
-    ui_category = "Color Correction";
+// Luma weight based on human color perception
+static const float3 LUMINOSITY_WEIGHT = float3(0.2126, 0.7152, 0.0722);  
+
+static const float PI = 3.1415927;
+
+uniform float Contrast < __UNIFORM_SLIDER_FLOAT1
+ 	ui_label = "Contrast";
+	ui_min = -1.0; ui_max = 1.0;
+	ui_tooltip = "The amount of contrast you want.";
+  	ui_category = "Color Correction (MODE 2: Contrast & Saturation)";
 > = 0.0;
+
 uniform float Saturation < __UNIFORM_SLIDER_FLOAT1
-	ui_min = -1.0; ui_max = 1.0;ui_step = 0.01;
+	ui_label = "Saturation";
+	ui_min = 0.0; ui_max = 2.0;ui_step = 0.01;
 	ui_tooltip = "Adjust saturation";
-    ui_category = "Color Correction";
-> = 0.0;
+    ui_category = "Color Correction (MODE 2: Contrast & Saturation)";
+> = 1.0;
 
 float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texcoord : TexCoord) : COLOR
 {
 	float3 color = backBuffer.rgb;
-	
-    color *= pow(2.0f, Exposure); // Exposure
-	color = pow(abs(color), Gamma); // Gamma
 
-	float3 middlegray = dot(color, (1.0 / 3.0));
-	float3 diffcolor = color - middlegray;
-	color = (color + diffcolor * Saturation) / (1 + (diffcolor * Saturation)); // Saturation
+	// caluclate luma (grayscale)
+	float luma = dot(color, LUMINOSITY_WEIGHT);
 	
+	// Adjust Contrast only when needed
+	if(Contrast != 0){
+	
+		// calculate chroma (colors - grayscale) 
+		float3 chroma = color.rgb - luma;
+		
+		// copy luma for curve formula
+		float x = luma;
+		
+		// Contrast
+		#if _CURVES_FORMULA == 1
+			// -- Curve 1 --
+			x = sin(PI * 0.5 * x); // Sin - 721 amd fps, +vign 536 nv
+			x *= x;
+		#elif _CURVES_FORMULA == 2
+			// -- Curve 2 --
+			x = x - 0.5;
+			x = (x / (0.5 + abs(x))) + 0.5;
+		#elif _CURVES_FORMULA == 3 
+			// -- Curve 3 --
+			x = x*x*(3.0 - 2.0*x); //faster smoothstep alternative - 776 amd fps, +vign 536 nv
+		#endif
+	
+		// apply contrast to luma
+		luma = lerp(luma, x, Contrast);
+		// re-apply chroma to the final color
+		color.rgb = luma + chroma;
+	}
+
+	// Adjust saturation 
+	color.rgb = lerp(luma.rrr, color.rgb, Saturation);
+
 	return color;
 }
 #endif
@@ -515,27 +528,20 @@ float3 ScreenSpaceDither(float2 vScreenPos: SV_Position)
 
 #if (VRT_ANTIALIASING_MODE == 1)
 
-uniform int VRT_AntialiasingMode1 <
-	ui_category = "Antialiasing"; 
-	ui_type = "radio"; 
-	ui_label= " ";
-	ui_text = "MODE 1: FXAA";
->;
-
 uniform float Subpix < __UNIFORM_SLIDER_FLOAT1
-	ui_category = "Antialiasing"; 
+	ui_category = "Antialiasing (MODE 1: FXAA)"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.05;
 	ui_tooltip = "Amount of sub-pixel aliasing removal. Higher values makes the image softer/blurrier.";
 > = 0.5;
 
 uniform float EdgeThreshold < __UNIFORM_SLIDER_FLOAT1
-	ui_category = "Antialiasing"; 
+	ui_category = "Antialiasing (MODE 1: FXAA)"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.005;
 	ui_label = "Edge Detection Threshold";
 	ui_tooltip = "The minimum amount of local contrast required to apply algorithm.";
 > = 0.5;
 uniform float EdgeThresholdMin < __UNIFORM_SLIDER_FLOAT1
-	ui_category = "Antialiasing"; 
+	ui_category = "Antialiasing (MODE 1: FXAA)"; 
 	ui_min = 0.0; ui_max = 1.0;ui_step = 0.01;
 	ui_label = "Darkness Threshold";
 	ui_tooltip = "Pixels darker than this are not processed in order to increase performance.";

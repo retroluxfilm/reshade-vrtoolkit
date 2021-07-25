@@ -85,9 +85,9 @@
 * This might cause artifacts on dark scenes that contain black pixel when heavy color corrections are applied.
 */
 #ifndef _VRT_DISCARD_BLACK
-  	#if VRT_USE_CENTER_MASK == 0 || VRT_COLOR_CORRECTION_MODE != 0
+  	//#if VRT_USE_CENTER_MASK == 0 || VRT_COLOR_CORRECTION_MODE != 0
     	#define _VRT_DISCARD_BLACK 1
-    #endif
+    //#endif
 #endif
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -98,30 +98,28 @@
 
 uniform int VRT_Advanced_help <
 	ui_type = "radio"; 
-	ui_label = "(?) Modes Info";
-	ui_text = 
-     "VRToolkit modes & settings:\n"
-     "";
-     
-     ui_tooltip =
+	ui_category = "(?) VRToolkit Modes & Settings Help";
+	ui_category_closed = true;
+	ui_label = " ";
+    ui_text =
     	" Open the \"Preprocess definitions\" section to change the folowing modes.\n"
     	"\n"
-		" Sharpening Modes:        0 - Disabled sharpening\n"
-        "                          1 - Filmic Anamorph Sharpening\n" 
-        "                          2 - AMD FidelityFX Contrast Adaptive Sharpening (CAS)\n"
+		" Sharpening:        0 - Disabled\n"
+        "                    1 - Filmic Anamorph Sharpening\n" 
+        "                    2 - CAS (Contrast Adaptive Sharpening)\n"
         "\n"
-        " Color Correction Modes:  0 - Disabled color correction\n"
-        "                          1 - Uses a LUT (Look up table) for specialized and complex corrections.\n"
-        "                          2 - Tonemapping to correct, gamma, exposure and color saturation.\n"
+        " Color Correction:  0 - Disabled\n"
+        "                    1 - LUT (Look up table)\n" 
+		"                    2 - Contrast & Saturation\n"
         "\n"
-        " Circular Masking:        0 - Disabled circular masking\n"
-        "                          1 - Uses circular mask to improve shader performance on games rendering on DX10 or higher.\n"
+        " Circular Masking:  0 - Disabled\n"
+        "                    1 - Enabled to improve performance\n"
         "\n"
-        " Dithering:               0 - Disable dithering\n"
-        "                          1 - Enable dithering that adds noise to the image to smoothen out gradients.\n"
+        " Dithering:         0 - Disabled\n"
+        "                    1 - Enabled to reduce banding on gradients.\n"
      	"\n"
-        " Antialiasing Modes:      0 - Disable antialiasing\n"
-        "                          1 - FXAA\n"
+        " Antialiasing:      0 - Disabled\n"
+        "                    1 - FXAA\n"
         "";
 	     
     >;
@@ -281,8 +279,8 @@ float4 CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : 
     #endif
        
 	#if VRT_USE_CENTER_MASK 
-        if(iCircularMaskPreview){
-	        backBuffer.gb += circularMask * 0.20;
+        if(CircularMaskPreview){
+	        backBuffer.rgb = lerp(backBuffer.rgb,backBuffer.ggg, circularMask);
         }
 	#endif  
 

@@ -31,7 +31,7 @@ If you want to contribute feel free to use pull requests.
   by Jakub Maximilian Fober
 - [LUT.fx](https://github.com/crosire/reshade-shaders/blob/slim/Shaders/LUT.fx)
   by Marty McFly  
-- [Tonemap.fx](https://github.com/crosire/reshade-shaders/blob/master/Shaders/Tonemap.fx)
+- [Curves.fx](https://github.com/crosire/reshade-shaders/blob/master/Shaders/Curves.fx)
   by Christian Cann Schuldt Jensen ~ CeeJay.dk
 - [CAS.fx](https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/CAS.fx)
   by Advanced Micro Devices and contributors
