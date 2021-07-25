@@ -125,27 +125,27 @@ http://creativecommons.org/licenses/by-sa/4.0/.
 
 #if (VRT_SHARPENING_MODE == 1)
 
-uniform float Strength < __UNIFORM_SLIDER_FLOAT1
+uniform float FAS_Strength < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Strength";
     ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 500; ui_step = 1;
 > = 250.0;
 
-uniform float Offset < __UNIFORM_SLIDER_FLOAT1
+uniform float FAS_Offset < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Radius";
     ui_tooltip = "High-pass cross offset in pixels";
     ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_min = 0.0; ui_max = 2.0; ui_step = 0.01;
 > = 0.10;
 
-uniform float Clamp < __UNIFORM_SLIDER_FLOAT1
+uniform float FAS_Clamp < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Clamping";
     ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_min = 0.5; ui_max = 1.0; ui_step = 0.001;
 > = 0.525;
 
-uniform bool Preview < __UNIFORM_INPUT_BOOL1
+uniform bool FAS_Preview < __UNIFORM_INPUT_BOOL1
     ui_label = "Preview sharpen layer";
 	ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";    
 	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n"
@@ -196,7 +196,7 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
     float3 Source = backBuffer.rgb;
 
     // Get pixel size
-	float2 Pixel = BUFFER_PIXEL_SIZE * Offset;
+	float2 Pixel = BUFFER_PIXEL_SIZE * FAS_Offset;
 
     float2 NorSouWesEst[4] = {
         float2(UvCoord.x, UvCoord.y + Pixel.y),
@@ -215,15 +215,15 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 	HighPassColor = 0.5 - 0.5 * (HighPassColor * 0.25 - dot(Source, LumaCoefficient));
 
     // Sharpen strength
-    HighPassColor = lerp(0.5, HighPassColor, Strength );
+    HighPassColor = lerp(0.5, HighPassColor, FAS_Strength );
 
     // Clamping sharpen
-    HighPassColor = max(min(HighPassColor, Clamp), 1.0 - Clamp);
+    HighPassColor = max(min(HighPassColor, FAS_Clamp), 1.0 - FAS_Clamp);
 
 	float3 Sharpen = saturate(Overlay3(Source,HighPassColor.rrr));
 
     // Preview mode ON
-    return Preview ? HighPassColor : Sharpen;
+    return FAS_Preview ? HighPassColor : Sharpen;
 }
 #endif
 
@@ -234,7 +234,7 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
 
 #if (VRT_SHARPENING_MODE == 2)
 
-uniform float Contrast <
+uniform float CAS_Contrast <
 	ui_type = "slider";
     ui_label = "Contrast Adaptation";
     ui_tooltip = "Adjusts the range the shader adapts to high contrast (0 is not all the way off).  Higher values = more high contrast sharpening.";
@@ -243,13 +243,13 @@ uniform float Contrast <
 	ui_min = 0.0; ui_max = 1.0;  ui_step = 0.01;
 > = 0.0;
 
-uniform float Sharpening <
+uniform float CAS_Sharpening <
 	ui_type = "slider";
     ui_label = "Sharpening intensity";
     ui_tooltip = "Adjusts sharpening intensity by averaging the original pixels to the sharpened result.  1.0 is the unmodified default.";
     ui_category = "Sharpening (MODE 2: CAS)";
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
-> = 1.0;
+> = 1.5;
 
 
 // RGB to YUV709 Luma
@@ -323,7 +323,7 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
     // Shaping amount of sharpening.
     ampRGB = rsqrt(ampRGB);
 
-    float peak = -3.0 * Contrast + 8.0;
+    float peak = -3.0 * CAS_Contrast + 8.0;
     float3 wRGB = -rcp(ampRGB * peak);
 
     float3 rcpWeightRGB = rcp(4.0 * wRGB + 1.0);
@@ -335,7 +335,7 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
     float3 outColor = saturate((window * wRGB + e) * rcpWeightRGB);
 
     // saturate the end result to avoid artifacts 
-	return saturate(lerp(e, outColor, Sharpening));
+	return saturate(lerp(e, outColor, CAS_Sharpening));
 }
 
 #endif
@@ -351,8 +351,8 @@ Copyright © 2008-2016 Marty McFly
 
 #if (VRT_COLOR_CORRECTION_MODE == 1)
 
-#ifndef fLUT_TextureName
-    #define fLUT_TextureName "lut.png"
+#ifndef LUT_TextureName
+    #define LUT_TextureName "lut.png"
 #endif
 
 #ifndef _fLUT_TileSizeXY
@@ -366,7 +366,7 @@ Copyright © 2008-2016 Marty McFly
 // texel size of the lut
 static const float2 LUT_TEXEL_SIZE = float2(1.0 /_fLUT_TileSizeXY / _fLUT_TileAmount, 1.0 /_fLUT_TileSizeXY);
 
-texture texLUT < source = fLUT_TextureName; > { Width = _fLUT_TileSizeXY*_fLUT_TileAmount; Height = _fLUT_TileSizeXY; Format = RGBA8; };
+texture texLUT < source = LUT_TextureName; > { Width = _fLUT_TileSizeXY*_fLUT_TileAmount; Height = _fLUT_TileSizeXY; Format = RGBA8; };
 sampler	SamplerLUT 	{ Texture = texLUT; };
 
 uniform int _VRT_ColorCorrectionMode1 <
@@ -378,14 +378,14 @@ uniform int _VRT_ColorCorrectionMode1 <
         "the \"Preprocessor definitions\" other than the default \"lut.png\"!";
 >;
 
-uniform float fLUT_AmountChroma < __UNIFORM_SLIDER_FLOAT1
+uniform float LUT_AmountChroma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT chroma amount";
     ui_tooltip = "Intensity of color/chroma change of the LUT.";
     ui_category = "Color Correction (MODE 1: LUT)";
 > = 1.00;
 
-uniform float fLUT_AmountLuma < __UNIFORM_SLIDER_FLOAT1
+uniform float LUT_AmountLuma < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0.00; ui_max = 1.00;
     ui_label = "LUT luma amount";
     ui_tooltip = "Intensity of luma change of the LUT.";
@@ -403,9 +403,9 @@ float3 PS_LUT_Apply(float4 backbuffer, float4 vpos : SV_Position, float2 texcoor
     float3 lutcolor = lerp(tex2D(SamplerLUT, lutcoord.xy).xyz, tex2D(SamplerLUT, float2(lutcoord.x+LUT_TEXEL_SIZE.y,lutcoord.y)).xyz,lerpfact);
 
    // only process linear interpolation when needed 
-   if( fLUT_AmountChroma != 1 || fLUT_AmountLuma != 1){
-     	color.xyz = lerp(normalize(color.xyz), normalize(lutcolor.xyz), fLUT_AmountChroma) *
-    	            lerp(length(color.xyz),    length(lutcolor.xyz),    fLUT_AmountLuma);
+   if( LUT_AmountChroma != 1 || LUT_AmountLuma != 1){
+     	color.xyz = lerp(normalize(color.xyz), normalize(lutcolor.xyz), LUT_AmountChroma) *
+    	            lerp(length(color.xyz),    length(lutcolor.xyz),    LUT_AmountLuma);
     	
         return color.xyz;    
 	}else{
@@ -434,14 +434,14 @@ static const float3 LUMINOSITY_WEIGHT = float3(0.2126, 0.7152, 0.0722);
 
 static const float PI = 3.1415927;
 
-uniform float Contrast < __UNIFORM_SLIDER_FLOAT1
+uniform float CS_Contrast < __UNIFORM_SLIDER_FLOAT1
  	ui_label = "Contrast";
 	ui_min = -1.0; ui_max = 1.0;
 	ui_tooltip = "The amount of contrast you want.";
   	ui_category = "Color Correction (MODE 2: Contrast & Saturation)";
 > = 0.0;
 
-uniform float Saturation < __UNIFORM_SLIDER_FLOAT1
+uniform float CS_Saturation < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Saturation";
 	ui_min = 0.0; ui_max = 2.0;ui_step = 0.01;
 	ui_tooltip = "Adjust saturation";
@@ -456,7 +456,7 @@ float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texc
 	float luma = dot(color, LUMINOSITY_WEIGHT);
 	
 	// Adjust Contrast only when needed
-	if(Contrast != 0){
+	if(CS_Contrast != 0){
 	
 		// calculate chroma (colors - grayscale) 
 		float3 chroma = color.rgb - luma;
@@ -479,13 +479,13 @@ float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texc
 		#endif
 	
 		// apply contrast to luma
-		luma = lerp(luma, x, Contrast);
+		luma = lerp(luma, x, CS_Contrast);
 		// re-apply chroma to the final color
 		color.rgb = luma + chroma;
 	}
 
 	// Adjust saturation 
-	color.rgb = lerp(luma.rrr, color.rgb, Saturation);
+	color.rgb = lerp(luma.rrr, color.rgb, CS_Saturation);
 
 	return color;
 }
@@ -500,7 +500,7 @@ float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texc
 
 #if VRT_DITHERING 
 
-uniform float iDitheringStrength <
+uniform float DitheringStrength <
     ui_category = "Dithering";
     ui_type = "slider";
     ui_label = "Dithering Strength";
@@ -515,7 +515,7 @@ float3 ScreenSpaceDither(float2 vScreenPos: SV_Position)
     //Iestyn's RGB dither (7 asm instructions) from Portal2 X360 , slightly modified for VR
     float3 vDither=dot(float2(171.0,231.0),vScreenPos.xy + (timer * 0.001)).xxx;
     vDither.rgb = frac(vDither.rgb/float3(103.0,71.0,97.0)) - float3(0.5,0.5,0.5);
-    return (vDither.rgb/255) * iDitheringStrength;
+    return (vDither.rgb/255) * DitheringStrength;
 
 }
 #endif
