@@ -280,7 +280,8 @@ float4 CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : 
        
 	#if VRT_USE_CENTER_MASK 
         if(CircularMaskPreview){
-	        backBuffer.rgb = lerp(backBuffer.rgb,backBuffer.ggg, circularMask);
+	        //backBuffer.rgb = lerp(backBuffer.rgb,backBuffer.rrr, circularMask) * 0.8;
+			backBuffer.gb += circularMask * 0.20;
         }
 	#endif  
 

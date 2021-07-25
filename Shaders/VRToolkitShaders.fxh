@@ -14,7 +14,7 @@
 from Holger Frydrych VR_CAS_Color.fx shader
 */
 
-#if VRT_USE_CENTER_MASK && (VRT_SHARPENING_MODE != 0 || VRT_ANTIALIASING_MODE != 0) // && __RENDERER__ >= 0xa000 // If DX10 or higher
+#if VRT_USE_CENTER_MASK //&& (VRT_SHARPENING_MODE != 0 || VRT_ANTIALIASING_MODE != 0) // && __RENDERER__ >= 0xa000 // If DX10 or higher
 
 /**
 * Smoothes the circular mask transition
@@ -59,8 +59,8 @@ uniform float CircularMaskSize <
 uniform float CircularMaskSmoothness <
     ui_category = "Circular Masking Mask";
     ui_type = "slider";
-    ui_label = "Mask Smoothness";
-    ui_tooltip = "Increases the smootness of the circular mask to allow smaller masks while reducing the prominence of the edge";
+    ui_label = "Edge Sharpness";
+    ui_tooltip = "Adjusts the edge of the circular mask to allow smaller radius while reducing the prominence of the edge";
     ui_min = 1.0; ui_max = 10; ui_step = 0.1;
 > = 5.0;
 #endif
@@ -129,10 +129,10 @@ uniform float FAS_Strength < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Strength";
     ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
     ui_category_closed = false;
-	ui_min = 0.0; ui_max = 500; ui_step = 1;
-> = 250.0;
+	ui_min = 0.0; ui_max = 250; ui_step = 1;
+> = 125;
 
-uniform float FAS_Offset < __UNIFORM_SLIDER_FLOAT1
+uniform float FAS_Radius < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Radius";
     ui_tooltip = "High-pass cross offset in pixels";
     ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";
@@ -192,11 +192,10 @@ float Overlay(float LayerAB)
 // Sharpen pass
 float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, float2 UvCoord : TEXCOORD0) : COLOR
 {
-    // Sample display image
-    float3 Source = backBuffer.rgb;
-
+  
+	// TODO can be set to a fixed value?
     // Get pixel size
-	float2 Pixel = BUFFER_PIXEL_SIZE * FAS_Offset;
+	float2 Pixel = BUFFER_PIXEL_SIZE * FAS_Radius;
 
     float2 NorSouWesEst[4] = {
         float2(UvCoord.x, UvCoord.y + Pixel.y),
@@ -205,25 +204,27 @@ float3 FilmicAnamorphSharpenPS(float4 backBuffer, float4 pos : SV_Position, floa
         float2(UvCoord.x - Pixel.x, UvCoord.y) 
     };
 
-    // Luma high-pass color
-    float HighPassColor = 0.0;
-    
+	// holds the sum of the pixel samples
+	float3 neighborPixelSamples = float3(0,0,0);
+	
 	[unroll]
     for(int s = 0; s < 4; s++)
-        HighPassColor += dot(tex2D(backBufferSamplerScalable, NorSouWesEst[s]).rgb, LumaCoefficient);
-    
-	HighPassColor = 0.5 - 0.5 * (HighPassColor * 0.25 - dot(Source, LumaCoefficient));
-
-    // Sharpen strength
-    HighPassColor = lerp(0.5, HighPassColor, FAS_Strength );
-
+        neighborPixelSamples += tex2D(backBufferSamplerScalable, NorSouWesEst[s]).rgb;
+  
+	//calculate highpass 
+	float HighPassColor = dot((neighborPixelSamples * 0.25) - backBuffer.rgb, LumaCoefficient);
+ 
+ 	// Sharpen strength
+	HighPassColor *= FAS_Strength;
+	
+	// Offset for the mids to be at 50% grey
+	HighPassColor = 0.5 - HighPassColor;
+ 
     // Clamping sharpen
     HighPassColor = max(min(HighPassColor, FAS_Clamp), 1.0 - FAS_Clamp);
-
-	float3 Sharpen = saturate(Overlay3(Source,HighPassColor.rrr));
-
+	
     // Preview mode ON
-    return FAS_Preview ? HighPassColor : Sharpen;
+    return FAS_Preview ? HighPassColor : saturate(Overlay3(backBuffer.rgb,HighPassColor.rrr));
 }
 #endif
 
