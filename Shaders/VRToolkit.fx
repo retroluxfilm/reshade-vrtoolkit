@@ -29,7 +29,7 @@
  *
  * Mode:  0 - Disabled color correction
  *        1 - Uses a LUT (Look up table) for specialized and complex corrections.
- *        2 - Tonemapping to correct, gamma, exposure and color saturation.
+ *        2 - Simple Contrast & color saturation.
  */
 #ifndef VRT_COLOR_CORRECTION_MODE
     #define VRT_COLOR_CORRECTION_MODE 0
@@ -73,9 +73,10 @@
 /**
  * Sets if the sharpening should work on the gamma corrected image to reduce artifacts.
  * This should be kept enabled and only disabled for debugging if required. 
+ * Note: only needs to be applied when the backbuffer is 8 bit to ensure it is linear when fetched. 10 bit backbuffer is always linear
  */
-#ifndef _VRT_LINEAR_BACKBUFFER //|| BUFFER_COLOR_BIT_DEPTH == 10
-    #if VRT_SHARPENING_MODE == 2 //&& VRT_ANTIALIASING_MODE != 0
+#ifndef _VRT_LINEAR_BACKBUFFER 
+    #if VRT_SHARPENING_MODE == 2 && BUFFER_COLOR_BIT_DEPTH == 8
         #define _VRT_LINEAR_BACKBUFFER 1
     #endif
 #endif
@@ -159,6 +160,7 @@ sampler backBufferSamplerScalable {
 
 #include "VRToolkitShaders.fxh"
 
+#if VRT_SHARPENING_MODE != 0
 // sharpening step
 float3 SharpeningStep(float4 backBuffer, float4 position , float2 texcoord ){
 
@@ -172,7 +174,9 @@ float3 SharpeningStep(float4 backBuffer, float4 position , float2 texcoord ){
     #endif
 
 }
+#endif
 
+#if (VRT_COLOR_CORRECTION_MODE != 0)
 // color correction step
 float3 ColorCorrectionStep(float4 backBuffer, float4 position , float2 texcoord ){
 
@@ -181,11 +185,13 @@ float3 ColorCorrectionStep(float4 backBuffer, float4 position , float2 texcoord 
         return PS_LUT_Apply(backBuffer, position, texcoord);
     #elif (VRT_COLOR_CORRECTION_MODE == 2)
         // Tonemapping
-        return TonemapPass(backBuffer, position, texcoord);
+        return ContrastColorPass(backBuffer, position, texcoord);
     #endif
-
+  
 }
+#endif
 
+#if VRT_ANTIALIASING_MODE != 0
 // anti aliasing step
 float4 AntialiasingStep(float4 position , float2 texcoord ){
 
@@ -193,7 +199,9 @@ float4 AntialiasingStep(float4 position , float2 texcoord ){
         // LUT shader
         return FXAAPixelShader(position, texcoord);
     #endif
+
 }
+#endif
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Main VRCombine Shader
@@ -272,7 +280,9 @@ float4 CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : 
         // convert backbuffer into linear mode for color corrections!
         #if (_VRT_LINEAR_BACKBUFFER )
             // convert from sRGB gamma back to linear 1/2.2
-            backBuffer.rgb = pow(backBuffer.rgb,GAMMA_SRGB_FACTOR);
+            //backBuffer.rgb = pow(backBuffer.rgb,GAMMA_SRGB_FACTOR);
+            //TODO need to check performance vs pow() that is not even precise
+            backBuffer.rgb = ApplySRGBCurve_Fast(backBuffer.rgb);
         #endif     
 	     
         backBuffer.rgb = ColorCorrectionStep(backBuffer,position,texcoord);
