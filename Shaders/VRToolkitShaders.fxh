@@ -8,6 +8,23 @@
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Helper Shader
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// taken from DirectX-Graphics-Samples https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/Shaders/ColorSpaceUtility.hlsli
+float3 ApplySRGBCurve( float3 x )
+{
+    // Approximately pow(x, 1.0 / 2.2)
+    return x < 0.0031308 ? 12.92 * x : 1.055 * pow(x, 1.0 / 2.4) - 0.055;
+}
+
+// These functions avoid pow() to efficiently approximate sRGB with an error < 0.4%.
+float3 ApplySRGBCurve_Fast( float3 x )
+{
+    return x < 0.0031308 ? 12.92 * x : 1.13005 * sqrt(x - 0.00228) - 0.13448 * x + 0.005719;
+}
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Radial Mask check for VR
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /*
@@ -101,6 +118,8 @@ float CircularMask( float2 texcoord )
         #if _MASK_SMOOTH
             float diff = (distSqr/maskSizeSqr);
             return 1 - pow(diff,CircularMaskSmoothness);
+            //TODO check if without pow is faster in a for loop unrolled
+            //return 1 - (diff * diff * diff * diff);
         #else
             return 1;
         #endif
@@ -148,9 +167,7 @@ uniform float FAS_Clamp < __UNIFORM_SLIDER_FLOAT1
 uniform bool FAS_Preview < __UNIFORM_INPUT_BOOL1
     ui_label = "Preview sharpen layer";
 	ui_category = "Sharpening (MODE 1: Filmic Anamorph Sharpen)";    
-	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n"
-    		     "If you don't see red strokes,\n"
-        	     "try changing Preprocessor Definitions in the Settings tab.";
+	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n";
     
 > = false;
 
@@ -252,6 +269,21 @@ uniform float CAS_Sharpening <
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
 > = 1.5;
 
+uniform float CAS_Clamp <
+    ui_category = "Sharpening (MODE 2: CAS)";  
+    ui_type = "slider";
+    ui_label = "Highlight Sharpening";
+    ui_tooltip = "Limits the bright parts from beeing sharpened. Lower the value to reduce shimmering on bright lines";
+    ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
+> = 0.25;
+
+uniform bool CAS_Preview < __UNIFORM_INPUT_BOOL1
+    ui_label = "Preview sharpen layer";
+	ui_category = "Sharpening (MODE 2: CAS)";  
+	ui_tooltip = "Preview sharpen layer and mask for adjustment.\n";
+    
+> = false;
+
 
 // RGB to YUV709 Luma
 static const float2 pixelOffset = BUFFER_PIXEL_SIZE * 0.5;
@@ -313,17 +345,24 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
     float3 mnRGB2 = min(mnRGB, min(min(a, c), min(g, i)));
     mnRGB += mnRGB2;
 
+	
+
+
     float3 mxRGB = max(max(max(d, e), max(f, b)), h);
     float3 mxRGB2 = max(mxRGB, max(max(a, c), max(g, i)));
     mxRGB += mxRGB2;
+	
+	// Reduce highlights Sharpening
+	mxRGB /= CAS_Clamp; 
+	mnRGB /= CAS_Clamp; 
 
     // Smooth minimum distance to signal limit divided by smooth max.
     float3 rcpMRGB = rcp(mxRGB);
-    float3 ampRGB = saturate(min(mnRGB, 2.0 - mxRGB) * rcpMRGB);
-
-    // Shaping amount of sharpening.
+	float3 ampRGB = saturate(min(mnRGB, 2.0 - mxRGB) * rcpMRGB);
+	
+	// Shaping amount of sharpening.
     ampRGB = rsqrt(ampRGB);
-
+        
     float peak = -3.0 * CAS_Contrast + 8.0;
     float3 wRGB = -rcp(ampRGB * peak);
 
@@ -333,10 +372,11 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
     //  Filter shape:           w 1 w
     //                          0 w 0
     float3 window = (b + d) + (f + h);
-    float3 outColor = saturate((window * wRGB + e) * rcpWeightRGB);
-
+    float3 outColor = (window * wRGB + e) * rcpWeightRGB;
+    
     // saturate the end result to avoid artifacts 
-	return saturate(lerp(e, outColor, CAS_Sharpening));
+	return CAS_Preview ? outColor - e : saturate(lerp(e, outColor, CAS_Sharpening));
+	
 }
 
 #endif
@@ -449,7 +489,7 @@ uniform float CS_Saturation < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Color Correction (MODE 2: Contrast & Saturation)";
 > = 1.0;
 
-float3 TonemapPass(float4 backBuffer, float4 position : SV_Position, float2 texcoord : TexCoord) : COLOR
+float3 ContrastColorPass(float4 backBuffer, float4 position : SV_Position, float2 texcoord : TexCoord) : COLOR
 {
 	float3 color = backBuffer.rgb;
 
