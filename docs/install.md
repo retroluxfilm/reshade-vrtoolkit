@@ -4,7 +4,7 @@
 Installation
 =======
 
-### Per Game 
+### Option A: Per Game 
 
 1. Download the [Latest Release]({{ site.github.releases[0].assets[0].browser_download_url }}) `VRToolkitReshadeUniversal_*.zip`
 2. Check the [Game List](/gamelist.html) for the game you want to use it on.
@@ -15,7 +15,7 @@ Installation
 5. Start up the game and then [Configure your HMD settings](/configuration.html)
 6. *Optional:* Change the [default preset or create your own](/presets.html) 
 
-### Global
+### Option B: Global
 *(For Experienced Users Only)*
 
 This installation type allows to update the toolkit easily for all games you use it on and keep
