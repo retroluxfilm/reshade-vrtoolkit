@@ -10,5 +10,8 @@ pages:
   - title: Configuration
     url: /configuration.html
 
+  - title: Presets
+    url: /presets.html
+
   - title: Game List
     url: /gamelist.html
