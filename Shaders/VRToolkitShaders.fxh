@@ -118,8 +118,6 @@ float CircularMask( float2 texcoord )
         #if _MASK_SMOOTH
             float diff = (distSqr/maskSizeSqr);
             return 1 - pow(diff,CircularMaskSmoothness);
-            //TODO check if without pow is faster in a for loop unrolled
-            //return 1 - (diff * diff * diff * diff);
         #else
             return 1;
         #endif
@@ -269,13 +267,13 @@ uniform float CAS_Sharpening <
 	ui_min = 0.0; ui_max = 5.0; ui_step = 0.01;
 > = 1.5;
 
-uniform float CAS_Clamp <
+uniform float CAS_Contrast_Clamp <
     ui_category = "Sharpening (MODE 2: CAS)";  
     ui_type = "slider";
-    ui_label = "Highlight Sharpening";
-    ui_tooltip = "Limits the bright parts from beeing sharpened. Lower the value to reduce shimmering on bright lines";
+    ui_label = "Contrast Clamping";
+    ui_tooltip = "Limits the bright & contrasty parts from beeing sharpened. Lower the value to reduce shimmering on bright lines";
     ui_min = 0.0; ui_max = 1.0; ui_step = 0.01;
-> = 0.25;
+> = 0.10;
 
 uniform bool CAS_Preview < __UNIFORM_INPUT_BOOL1
     ui_label = "Preview sharpen layer";
@@ -284,6 +282,11 @@ uniform bool CAS_Preview < __UNIFORM_INPUT_BOOL1
     
 > = false;
 
+// Without CAS_BETTER_DIAGONALS defined, the algorithm is a little faster.
+// Instead of using the 3x3 "box" with the 5-tap "circle" this uses just the "circle".
+#ifndef CAS_BETTER_DIAGONALS
+	#define CAS_BETTER_DIAGONALS 0
+#endif
 
 // RGB to YUV709 Luma
 static const float2 pixelOffset = BUFFER_PIXEL_SIZE * 0.5;
@@ -342,24 +345,31 @@ float3 CASPass(float4 backBuffer, float4 vpos : SV_Position, float2 texcoord : T
 	//  g h i             h
     // These are 2.0x bigger (factored out the extra multiply).
     float3 mnRGB = min(min(min(d, e), min(f, b)), h);
+#if CAS_BETTER_DIAGONALS
     float3 mnRGB2 = min(mnRGB, min(min(a, c), min(g, i)));
     mnRGB += mnRGB2;
-
-	
-
+#endif
 
     float3 mxRGB = max(max(max(d, e), max(f, b)), h);
+#if CAS_BETTER_DIAGONALS
     float3 mxRGB2 = max(mxRGB, max(max(a, c), max(g, i)));
     mxRGB += mxRGB2;
-	
-	// Reduce highlights Sharpening
-	mxRGB /= CAS_Clamp; 
-	mnRGB /= CAS_Clamp; 
+#endif
 
-    // Smooth minimum distance to signal limit divided by smooth max.
+	// Reduce strong contrast elements from being sharpened to reduce aliasing artifacts
+	if(mxRGB.g - mnRGB.g > CAS_Contrast_Clamp){
+		mnRGB = 0;
+	}
+
+	// Smooth minimum distance to signal limit divided by smooth max.
     float3 rcpMRGB = rcp(mxRGB);
+
+#if CAS_BETTER_DIAGONALS
 	float3 ampRGB = saturate(min(mnRGB, 2.0 - mxRGB) * rcpMRGB);
-	
+#else
+	float3 ampRGB = saturate(min(mnRGB, 1.0 - mxRGB) * rcpMRGB);
+#endif
+
 	// Shaping amount of sharpening.
     ampRGB = rsqrt(ampRGB);
         
