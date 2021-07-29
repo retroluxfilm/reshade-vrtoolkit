@@ -257,7 +257,7 @@ uniform float CAS_Contrast <
     ui_category = "Sharpening (MODE 2: CAS)";
     ui_category_closed = false;
 	ui_min = 0.0; ui_max = 1.0;  ui_step = 0.01;
-> = 0.0;
+> = 0.5;
 
 uniform float CAS_Sharpening <
 	ui_type = "slider";
