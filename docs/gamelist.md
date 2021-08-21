@@ -10,7 +10,7 @@ Additionally they contain color corrections LUT especially created for the game.
 
 - [Automobilista](https://www.racedepartment.com/downloads/retrolux-reshade-automobilista.30742/)
 - [GTR2](https://www.racedepartment.com/downloads/retrolux-reshade-gtr2.42342/)
-- [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/) *(VR not working yet)*
+- [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/)
 
 
 ### Working
@@ -27,21 +27,22 @@ Feel free to contribute to get that list up to date :)
 | Beat Saber                          |          64 |  dxgi.dll      | next to "Beat Saber.exe"             |
 | DCS World                           |          64 |  dxgi.dll      | bin                                  |
 | Dirt Rally (With Revive)            |          32 |  dxgi.dll      | next to drt.exe                      |
+| Dirt Rally 2                        |          64 |  dxgi.dll      | next to dirtrally2.exe               |
 | Elite Dangerous                     |          64 |  d3d11.dll     | next to EliteDangerous64.exe         |
 | Euro Truck Simulator 2              |          64 |  dinput8.dll   | bin\win_x64                          |
+| Google Earth VR                     |          64 |  opengl32.dll  | next to Earth.exe                    |
 | Half Life Alyx                      |          64 |  kernel32.dll  | game\bin\win64                       |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | bin\game                             |
 | Project Cars 2                      |          64 |  opengl32.dll  | next to pCARS2.exe                   |
 | rFactor 2                           |          64 |  dxgi.dll      | Bin64                                |
 | Skyrim VR                           |          64 |  dxgi.dll      | next to SkyrimVR.exe                 |
 | VTOL VR                             |          64 |  dxgi.dll      | next to VTOLVR.exe                   |
+| The Walking Dead Saints and Sinners |          64 |  dxgi.dll      | TWD\Binaries\Win64\                  |
 
 ### Not Working
 
-- Walking Dead Saints and Sinners (one eye stays black)
 - Race Room Experience (Crashes on start in VR on 32 & 64bit version)
 - XPlane (Failed to create ImGui pipeline)
-
 
 ## Known Issues
 
@@ -50,12 +51,7 @@ Feel free to contribute to get that list up to date :)
   As a workaround you need to use the screen mirror to change the preprocessor settings
   and then use the `reload button` it from the SteamVR Reshade to apply the settings.
 
-- **Left Eye stays black/flicker**
-
-  This is caused by certain vr pixel count/resolution and can be minimized/fixed by
-  going up and down a few steps until it works.
-
-- **Steam VR Reshade Settings window flicker**
+- **Steam VR Reshade Settings window & effects flicker**
 
   This is caused when the render target switches, especially prominent on games that dynamically
   change the resolution like Half Life Alyx does.
