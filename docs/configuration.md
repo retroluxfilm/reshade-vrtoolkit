@@ -27,7 +27,7 @@ Use the `"Mask Preview"` checkbox to see the circle mask in cyan color for easie
 | Valve Index                            |  0.30 to 0.35 | 0.3                |
 | Oculus Quest1                          |  0.30 to 0.35 | 0.3                |
 | HP G1 & G2                             |  0.41 to 0.46 | 0.3                |
-| Pimax 5k & 8k Large FOV, No PP         |  +- 0.23      | 0.336             |
+| Pimax 5k & 8k Large FOV, No PP         |  +- 0.23      | 0.336              |
 
 ### Hotkeys: 
 
