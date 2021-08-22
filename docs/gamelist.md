@@ -27,7 +27,7 @@ Feel free to contribute to get that list up to date :)
 | Beat Saber                          |          64 |  dxgi.dll      | next to "Beat Saber.exe"             |
 | DCS World                           |          64 |  dxgi.dll      | bin                                  |
 | Dirt Rally (With Revive)            |          32 |  dxgi.dll      | next to drt.exe                      |
-| Dirt Rally 2                        |          64 |  dxgi.dll      | next to dirtrally2.exe               |
+| Dirt Rally 2                        |          64 |  dinput8.dll   | next to dirtrally2.exe               |
 | Elite Dangerous                     |          64 |  d3d11.dll     | next to EliteDangerous64.exe         |
 | Euro Truck Simulator 2              |          64 |  dinput8.dll   | bin\win_x64                          |
 | Google Earth VR                     |          64 |  opengl32.dll  | next to Earth.exe                    |
@@ -41,15 +41,10 @@ Feel free to contribute to get that list up to date :)
 
 ### Not Working
 
-- Race Room Experience (Crashes on start in VR on 32 & 64bit version)
+- Race Room Experience (Needs DX10 implementation for VR in Reshade)
 - XPlane (Failed to create ImGui pipeline)
 
 ## Known Issues
-
-- **Opening the `Preprocessor Settings` in the SteamVR Reshade menu crashes the game.**
-
-  As a workaround you need to use the screen mirror to change the preprocessor settings
-  and then use the `reload button` it from the SteamVR Reshade to apply the settings.
 
 - **Steam VR Reshade Settings window & effects flicker**
 
