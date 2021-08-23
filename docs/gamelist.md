@@ -40,10 +40,11 @@ Feel free to contribute to get that list up to date :)
 | Skyrim VR                           |          64 |  dxgi.dll      | next to SkyrimVR.exe                 |
 | VTOL VR                             |          64 |  dxgi.dll      | next to VTOLVR.exe                   |
 | The Walking Dead Saints and Sinners |          64 |  dxgi.dll      | TWD\Binaries\Win64\                  |
+| X-Plane 11                          |          64 |  opengl32.dll  | next to X-Plane.exe                  |
 
 ### Not Working
 
-- XPlane (Failed to create ImGui pipeline)
+- None reported yet
 
 ## Known Issues
 
