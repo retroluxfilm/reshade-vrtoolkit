@@ -34,6 +34,8 @@ Feel free to contribute to get that list up to date :)
 | Half Life Alyx                      |          64 |  kernel32.dll  | game\bin\win64                       |
 | IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | bin\game                             |
 | Project Cars 2                      |          64 |  opengl32.dll  | next to pCARS2.exe                   |
+| Race Room Experience 64 Bit         |          64 |  dxgi.dll      | Game\x64\                            |    
+| Race Room Experience 32 Bit         |          32 |  dxgi.dll      | Game\                                |
 | rFactor 2                           |          64 |  dxgi.dll      | Bin64                                |
 | Skyrim VR                           |          64 |  dxgi.dll      | next to SkyrimVR.exe                 |
 | VTOL VR                             |          64 |  dxgi.dll      | next to VTOLVR.exe                   |
@@ -41,7 +43,6 @@ Feel free to contribute to get that list up to date :)
 
 ### Not Working
 
-- Race Room Experience (Needs DX10 implementation for VR in Reshade)
 - XPlane (Failed to create ImGui pipeline)
 
 ## Known Issues
