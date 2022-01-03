@@ -25,10 +25,12 @@ Recommended setup for a game to allow easy mod management.
 2. Prepare you Game for mods
     1. `File -> New -> Software Context` (This represents the Game that you want to install mods to.)
     2. Set the path and name it to the game you want to mod. `(eg. D:\Games\OMM_GameMods\Automobilista)`
-       ![Setup Software Context](./setup_software_context.png)
+       
+       ![](./setup_software_context.png)
     3. Set the path for the target where the mods should be installed into. 
-       Keep the mods and backup folder to their default location.
-       ![Setup Target location](./setup_target_location.png)
+        Keep the mods and backup folder to their default location.
+       
+       ![](./setup_target_location.png)
 3. Open up the created context by  `File -> Open` or `File -> Recent contexts`
 
 **TIP:**
@@ -50,12 +52,16 @@ Uses mod URLs of your communities to be able download mods directly within OMM.
 1. Open up the desired game context by  `File -> Open` or `File -> Recent contexts`
 2. Open Target Location Properties (Game) by `Edit -> Target Location Properties` and switch to 
    network tab to add/remove URLs.
+
    ![](target_network_repository.png)
-4. Add URL to your community mod repository and use the test button validate it.
+3. Add URL to your community mod repository and use the test button validate it.
+
    ![](add_network_repository.png)
 5. Close Target Location Properties Dialog.
 6. Select the Network Tab for your mod library and refresh the repository to fetch the mods.
+
    ![](target_network_repository_list.png)
+
 7. Select your desired mods and download/update them into your [Local Mods](#local-mods)
    folder `(eg. D:\Games\OMM_GameMods\Automobilista\MainGame\Library)`
 
