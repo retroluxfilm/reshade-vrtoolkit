@@ -87,6 +87,7 @@ TODO
 -----------------------------------------------------------------------------------------------------------
 
 ## 3. Activate & Deactivate Mods
+*Note:* On activation of a mod it will create a backup of all replaced files to restore them.
 
 1. Open up the desired game context by  `File -> Open` or `File -> Recent contexts`
 2. Single click on the desired mod to see its description.
