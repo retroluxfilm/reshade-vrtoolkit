@@ -48,27 +48,24 @@ To be able to add mods you your created game context you have two options:
 ### A. Network repositories
 
 Uses mod URLs of your communities to be able download mods directly within OMM.
+*(Easiest way if your community supports it)*
 
 1. Open up the desired game context by  `File -> Open` or `File -> Recent contexts`
-2. Open Target Location Properties (Game) by `Edit -> Target Location Properties` and switch to 
-   network tab to add/remove URLs.
-
-   ![](target_network_repository.png)
-3. Add URL to your community mod repository and use the test button validate it.
+2. Switch from the `Library Tab` to the `Network Tab`
+3. Add URL to your community mod repository with the `+ button`. (Use the test button to validate)
 
    ![](add_network_repository.png)
-5. Close Target Location Properties Dialog.
-6. Select the Network Tab for your mod library and refresh the repository to fetch the mods.
+4. Refresh the repository's with the `circle arrow button` to fetch all available/updated mods.
 
-   ![](target_network_repository_list.png)
-
-7. Select your desired mods and download/update them into your [Local Mods](#local-mods)
+5. Select your desired mods and download/update them into your [Mod Library](#b-local-mod-library)
    folder `(eg. D:\Games\OMM_GameMods\Automobilista\MainGame\Library)`
 
-### B. Local Mods
+   ![](target_network_repository_list.png)   
 
-All mods needs to be placed into your local mods folder to be able to activate/deactivate them for your game.
-When using network repositories they will be downloaded into your local mods automatically for you.
+### B. Local Mod Library
+
+All mods need to be in your Mod Library folder to be able to activate/deactivate them for your game.
+When using network repositories they will be downloaded into your library automatically for you.
 
 ![](target_local_library_list.png)
 
@@ -77,13 +74,9 @@ When using network repositories they will be downloaded into your local mods aut
 1. Open up the desired game context by  `File -> Open` or `File -> Recent contexts`
 2. Copy the mod *.zip to your library folder of your game
    context `(eg. D:\Games\OMM_GameMods\Automobilista\MainGame\Library)`
-3. Added mods should now show up under the library tab (will be auto refreshed by OMM)
-
-**Unprepared or Legacy mods**
-
-TODO
-
-
+3. Added mods should now show up under the library tab (will be auto refreshed by OMM).
+   If they are not shown then they need to be [prepared for OMM usage](#prepare-mods-for-omm-usage).
+  
 -----------------------------------------------------------------------------------------------------------
 
 ## 3. Activate & Deactivate Mods
@@ -96,12 +89,18 @@ TODO
 
 -----------------------------------------------------------------------------------------------------------
 
-## Prepare Mods for OMM usage
-
+## Prepare Mods for OMM usage (WIP)
 *(For Experienced Users)*
 
-TODO
+To be able to use a mod in OMM they often need to prepared to be usable.
 
-- Dependencies
-- Folder Structure
-- Use of the Package Manager
+1. Extract zip contents into a new folder named as your zip of the mod into your library folder `(eg. D:\Games\OMM_GameMods\Automobilista\MainGame\Library)`
+2. Go into the extracted folder and check the structure follows the one from your game target root folder contents.
+   It should NOT contain the folder name of the of the game target itself `(eg. .\Automobilista\)`
+3. Move the folders to match the structure of your game.
+4. Open up the desired game context by  `File -> Open` or `File -> Recent contexts` in OMM
+5. The newly added folder should be visible in the `Library Tab`
+6. Right clicking on the folder of your extracted mod in OMM and select `Load in Package Editor...`
+7. Edit Mod details are you see fit (Icon, Description etc.)
+8. Save when finished and it will create a zip inside your library that is ready to be used in OMM
+9. You can now remove the old mod folder by right clicking it and select `Move to Recycle Bin`.
