@@ -79,7 +79,7 @@ When using network repositories they will be downloaded into your library automa
   
 -----------------------------------------------------------------------------------------------------------
 
-## 3. Activate & Deactivate Mods
+## 4. Activate & Deactivate Mods
 *Note:* On activation of a mod it will create a backup of all replaced files to restore them.
 
 1. Open up the desired game context by  `File -> Open` or `File -> Recent contexts`
