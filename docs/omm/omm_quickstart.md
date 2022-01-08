@@ -89,7 +89,7 @@ When using network repositories they will be downloaded into your library automa
 
 -----------------------------------------------------------------------------------------------------------
 
-## Prepare Mods for OMM usage (WIP)
+## Prepare Mods for OMM usage
 *(For Experienced Users)*
 
 To be able to use a mod in OMM they often need to prepared to be usable.
@@ -102,5 +102,7 @@ To be able to use a mod in OMM they often need to prepared to be usable.
 5. The newly added folder should be visible in the `Library Tab`
 6. Right clicking on the folder of your extracted mod in OMM and select `Load in Package Editor...`
 7. Edit Mod details are you see fit (Icon, Description etc.)
+   
+   ![](package_editor.png)
 8. Save when finished and it will create a zip inside your library that is ready to be used in OMM
 9. You can now remove the old mod folder by right clicking it and select `Move to Recycle Bin`.
