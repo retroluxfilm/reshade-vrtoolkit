@@ -2,6 +2,6 @@ theme: jekyll-theme-cayman
 show_downloads: "true"
 github:
   repository_name: "VR Toolkit"
-  zip_url: https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v0.9.7-pre/VRToolkitReshadeUniversal_0.9.7-pre.zip
+  zip_url: https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.0.0/VRToolkitReshadeUniversal_1.0.0.zip
 logo: /assets/images/vrtoolkit_logo.png
 image: /assets/images/vrtoolkit_opengraph.png
