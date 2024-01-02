@@ -9,16 +9,22 @@ Select the prests below by using the arrow buttons on the left side of the prese
 
 `generic_vr` (Default)  
 Base preset is configured to work without modification for almost all VR titles to look 
-natural without adding artifacts.
+natural without adding artifacts. (Custom CAS Sharpening)
 
 `generic_vr+`  
 Sharper than the base preset, balanced to not introduce a lot artifacts. 
 
+`generic_vr++`  
+Sharper than the vr+ preset, which can introduce artifacts or aliasing. (mostly useful for high resolution VR) 
+
 `generic_filmic_vr`  
-Like the base preset but uses "Filmic Anamorph Sharpening" for sharpening instead & dithering to reduce banding.
+Like the base preset but uses "Filmic Anamorphic Sharpening" for sharpening instead & dithering to reduce banding.
 
 `generic_filmic_vr+`  
-Sharper than the filmic preset but introduces artifacts.
+Sharper than the filmic preset, balanced to not introduce a lot artifacts.
+
+`generic_filmic_vr++`  
+Sharper than the filmic+ preset, which can introduce artifacts or aliasing. (mostly useful for high resolution VR)
 
 ### How to select a Preset
 ![VRToolkit presets](./assets/images/vrtoolkit_presets.png "VRToolkit presets")

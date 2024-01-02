@@ -12,43 +12,44 @@ Additionally they contain color corrections LUT especially created for the game.
 - [GTR 2](https://www.racedepartment.com/downloads/retrolux-reshade-gtr2.42342/)
 - [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/)
 
+### Open XR (Available with ReShade v5.9.3 or higher)
+Games using OpenXR or when you use the OpenXR Toolkit you need to use the [Reshade Setup](https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.1.0/ReShade.Setup_5.9.3-preview.exe) to
+install the OpenXR ReShade layer to be able to use ReShade. 
 
-### Working
+*Note: ReShade will then be enabled for all open XR Games if you place the vrtoolkit besides the executable of the game*
+
+### Working (Examples)
 Here is a list of tested games that work with ReShade.
 Many more will work and require to figure out what settings it needs.
 Feel free to contribute to get that list up to date :)
 
-| Game                                | DLL         | Rename To      | Extract to Folder                    |
-| ----------------------------------- | -----------:| --------------:|------------------------------------- |
-| American Truck Simulator            |          64 |  dinput8.dll   | bin\win_x64                          |
+| Game                                | DLL |       Rename To | Extract to Folder            |
+| ----------------------------------- |----:|----------------:|------------------------------|
+| American Truck Simulator            |  64 |     dinput8.dll | bin\win_x64                  |
 | [Automobilista 1](https://www.racedepartment.com/downloads/retrolux-reshade-automobilista.30742/)         |
-| Automobilista 2                     |          64 |  dinput8.dll   | next to AMS2.exe                     |
-| Asseto Corsa                        |          64 |  dxgi.dll      | next to AssettoCorsa.exe             |
-| Asseto Corsa Competizione           |          64 |  dxgi.dll      | AC2\Binaries\Win64                   |
-| Beat Saber                          |          64 |  dxgi.dll      | next to "Beat Saber.exe"             |
-| DCS World                           |          64 |  dxgi.dll      | bin                                  |
-| Dirt Rally (With Revive)            |          32 |  dxgi.dll      | next to drt.exe                      |
-| Dirt Rally 2                        |          64 |  dinput8.dll   | next to dirtrally2.exe               |
-| Elite Dangerous                     |          64 |  d3d11.dll     | next to EliteDangerous64.exe         |
-| Euro Truck Simulator 2              |          64 |  dinput8.dll   | bin\win_x64                          |
+| Automobilista 2                     |  64 |     dinput8.dll | next to AMS2.exe             |
+| Asseto Corsa                        |  64 |        dxgi.dll | next to AssettoCorsa.exe     |
+| Asseto Corsa Competizione           |  64 |        dxgi.dll | AC2\Binaries\Win64           |
+| Beat Saber                          |   - | [Open XR]() | next to "Beat Saber.exe"     |
+| DCS World                           |  64 |        dxgi.dll | bin                          |
+| Dirt Rally (With Revive)            |  32 |        dxgi.dll | next to drt.exe              |
+| Dirt Rally 2                        |  64 |     dinput8.dll | next to dirtrally2.exe       |
+| Elite Dangerous                     |  64 |       d3d11.dll | next to EliteDangerous64.exe |
+| Euro Truck Simulator 2              |  64 |     dinput8.dll | bin\win_x64                  |
 | [GTR 2](https://www.racedepartment.com/downloads/retrolux-reshade-gtr2.42342/) |
-| Google Earth VR                     |          64 |  opengl32.dll  | next to Earth.exe                    |
-| Half Life Alyx                      |          64 |  kernel32.dll  | game\bin\win64                       |
-| IL-2 Sturmovik Battle of Stalingrad |          64 |  dxgi.dll      | bin\game                             |
-| Project Cars 2                      |          64 |  dinput8.dll   | next to pCARS2.exe                   |
-| Race Room Experience 64 Bit         |          64 |  dxgi.dll      | Game\x64\                            |    
-| Race Room Experience 32 Bit         |          32 |  dxgi.dll      | Game\                                |
-| [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/) |
-| rFactor 2                           |          64 |  dxgi.dll      | Bin64                                |
-| Skyrim VR                           |          64 |  dxgi.dll      | next to SkyrimVR.exe                 |
-| VR Chat                             |          64 |  dxgi.dll      | next to VRChat.exe                   |
-| VTOL VR                             |          64 |  dxgi.dll      | next to VTOLVR.exe                   |
-| The Walking Dead Saints and Sinners |          64 |  dxgi.dll      | TWD\Binaries\Win64\                  |
-| X-Plane 11                          |          64 |  opengl32.dll  | next to X-Plane.exe                  |
-
-### Not Working
-
-- None reported yet
+| Google Earth VR                     |  64 |    opengl32.dll | next to Earth.exe            |
+| Half Life Alyx                      |  64 |    kernel32.dll | game\bin\win64               |
+| IL-2 Sturmovik Battle of Stalingrad |  64 |        dxgi.dll | bin\game                     |
+| Project Cars 2                      |  64 |     dinput8.dll | next to pCARS2.exe           |
+| Race Room Experience 64 Bit         |  64 |        dxgi.dll | Game\x64\                    |    
+| Race Room Experience 32 Bit         |  32 |        dxgi.dll | Game\                        |
+| [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/) 
+| rFactor 2                           |  64 |        dxgi.dll | Bin64                        |
+| Skyrim VR                           |  64 |        dxgi.dll | next to SkyrimVR.exe         |
+| VR Chat                             |  64 |        dxgi.dll | next to VRChat.exe           |
+| VTOL VR                             |  64 |        dxgi.dll | next to VTOLVR.exe           |
+| The Walking Dead Saints and Sinners |  64 |        dxgi.dll | TWD\Binaries\Win64\          |
+| X-Plane 11                          |  64 |    opengl32.dll | next to X-Plane.exe          |
 
 ## Known Issues
 

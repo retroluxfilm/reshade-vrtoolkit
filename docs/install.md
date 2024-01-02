@@ -15,6 +15,9 @@ Installation
 5. Start up the game and then [Configure your HMD settings](/configuration.html)
 6. *Optional:* Change the [default preset or create your own](/presets.html) 
 
+*Note: For OpenXR Games you need to use the [Reshade Setup](https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.1.0/ReShade.Setup_5.9.3-preview.exe)*
+
+
 ### Option B: Global
 *(For Experienced Users Only)*
 
