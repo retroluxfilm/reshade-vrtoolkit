@@ -10,8 +10,9 @@ Installation
 2. Check the [Game List](/gamelist.html) for the game you want to use it on.
 3. Extract the contents of the release zip into the required folder of the game.
    If the game is not listed, you usually place it next where the game executable is located.
-4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL.
-   Usually modern games use the 64 bit version and renamed to dxgi.dll.
+4. Rename the `ReShade64.dll` or `ReShade32.dll` depending on the required DLL (Usually modern games use the 64 bit version and renamed to dxgi.dll.)
+   or for OpenXR Games you only need to use the supplied
+   [Reshade Setup](https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.1.0/ReShade.Setup_5.9.3-preview.exe) to enable ReShade
 5. Start up the game and then [Configure your HMD settings](/configuration.html)
 6. *Optional:* Change the [default preset or create your own](/presets.html) 
 
