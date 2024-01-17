@@ -12,8 +12,8 @@ Additionally they contain color corrections LUT especially created for the game.
 - [GTR 2](https://www.racedepartment.com/downloads/retrolux-reshade-gtr2.42342/)
 - [Richard Burns Rally](https://www.racedepartment.com/threads/reshade-preset-for-rbr.166023/)
 
-### Open XR (Available with ReShade v5.9.3 or higher)
-Games using OpenXR or when you use the OpenXR Toolkit you need to use the [Reshade Setup](https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.1.0/ReShade.Setup_5.9.3-preview.exe) to
+### Open XR (Available starting with ReShade v6.x )
+Games using OpenXR or when you use the OpenXR Toolkit you need to use the official [Reshade Installer]((https://reshade.me/#download)) to
 install the OpenXR ReShade layer to be able to use ReShade. 
 
 *Note: ReShade will then be enabled for all open XR Games if you place the vrtoolkit besides the executable of the game*
