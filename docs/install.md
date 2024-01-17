@@ -19,7 +19,6 @@ Installation
 
 *Note: For OpenXR Games you need to use the [Reshade Setup](https://github.com/retroluxfilm/reshade-vrtoolkit/releases/download/v1.1.0/ReShade.Setup_5.9.3-preview.exe)*
 
-
 ### Option B: Global
 *(For Experienced Users Only)*
 
