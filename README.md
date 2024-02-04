@@ -39,6 +39,8 @@ If you want to contribute feel free to use pull requests.
   by Holger Frydrych
 - [Dithering](https://gdcvault.com/play/1021771/Advanced-VR)
   by Value, programmer Lestyn
+- [FXAA](https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/FXAA.fx)
+  by Timothy Lottes
 
 
 ![GitHub all releases](https://img.shields.io/github/downloads/retroluxfilm/reshade-vrtoolkit/total)
