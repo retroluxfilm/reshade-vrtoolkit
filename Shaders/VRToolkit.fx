@@ -60,6 +60,15 @@
 	#define VRT_DITHERING 0
 #endif
 
+/**
+ * Antialiasing to reduce aliasing/shimmering. This helps to further smoothen out the image after MSAA has done most of the work
+ *
+ * Mode:  0 - Disable antialiasing
+ *        1 - Enable dithering that adds noise to the image to smoothen out gradients
+ */
+#ifndef VRT_ANTIALIASING_MODE
+	#define VRT_ANTIALIASING_MODE 0
+#endif
 
 /**
  * Sets if the sharpening should work on the gamma corrected image to reduce artifacts.
@@ -109,6 +118,9 @@ uniform int VRT_Advanced_help <
         "\n"
         " Dithering:         0 - Disabled\n"
         "                    1 - Enabled to reduce banding on gradients.\n"
+     	"\n"
+        " Antialiasing:      0 - Disabled\n"
+        "                    1 - FXAA\n"
         "";
 	     
     >;
@@ -179,6 +191,18 @@ float3 ColorCorrectionStep(float4 backBuffer, float4 position , float2 texcoord 
 }
 #endif
 
+#if VRT_ANTIALIASING_MODE != 0
+// anti aliasing step
+float4 AntialiasingStep(float4 position , float2 texcoord ){
+
+    #if (VRT_ANTIALIASING_MODE == 1)
+        // LUT shader
+        return FXAAPixelShader(position, texcoord);
+    #endif
+
+}
+#endif
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Main VRCombine Shader
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -201,6 +225,28 @@ float4 CombineVRShaderPS(in float4 position : SV_Position, in float2 texcoord : 
         float circularMask = CircularMask(texcoord);
 	#endif
 
+    #if (VRT_ANTIALIASING_MODE != 0)
+		
+ 		#if VRT_USE_CENTER_MASK
+ 		
+	        // only apply sharpen when the mask is not black
+            if(circularMask != 0){
+
+            	//get the anti aliased backbuffer to work on 
+	            float4 antialiasedBackBuffer = AntialiasingStep(position,texcoord);
+
+	            #if _MASK_SMOOTH
+                	backBuffer.rgb = lerp(backBuffer.rgb,antialiasedBackBuffer.rgb,circularMask);
+                #else
+                	backBuffer = sharpeningResult;
+                #endif
+            } 
+        #else
+	        // directly apply anti aliasing without masking
+	        backBuffer = AntialiasingStep(position,texcoord);
+	    #endif
+	#endif
+  	
     #if VRT_DITHERING
         // apply dithering before any post processing is done
 		backBuffer.rgb -= ScreenSpaceDither(position.xy);
